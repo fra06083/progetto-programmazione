@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <cstring>
 // CLASSI FUNZIONI DA IMPLEMENTARE
 using namespace std;
 //  endwin(); termina il gioco
@@ -13,13 +14,31 @@ void init_game(){
     win = newwin(max_y, max_x, 0, 0);
     refresh();
     box(win, 0, 0);
-    keypad(win, true);
-}
-int main(){
-    init_game();
-    mvwprintw(win, 1, 1, "Main Menu");
     wrefresh(win);
-    int c = getch();
-    endwin();
-    return 0;
+    keypad(win, true);
+    curs_set(0);
+}
+int main() {
+    init_game();
+    int scelta = 0; 
+        while(1) {
+        mvwprintw(win, 2, 2, "Nuova Partita");
+        mvwprintw(win, 4, 2, "Shop");
+        mvwprintw(win, 6, 2, "Esci dal Gioco");
+        wrefresh(win);
+        switch(getch()) {
+              case KEY_UP:
+            if (scelta > 0) {
+                scelta--;
+            }
+            break;
+        case KEY_DOWN:
+            if (scelta < 3) {
+                scelta++;
+            }
+            break;
+        }
+       }
+    endwin(); 
+    return 0; 
 }
