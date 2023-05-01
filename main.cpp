@@ -37,6 +37,10 @@ int main() {
                 scelta++;
             }
             break;
+         case 10: //ENTER
+           if (scelta == 2) break;
+           //if (scelta == 0) (? classe newgame ?)
+           //if (scelta == 1) (? classe shop ?)
         }
        }
     endwin(); 
