@@ -1,9 +1,8 @@
-#include "personaggio.hpp"
-#include "Map.hpp"
+#include "class/personaggio.hpp"
+#include "class/map.hpp"
 #include <ncurses.h>
 #include <iostream>
 #include <ctime>
-
 
 WINDOW *win;
 
@@ -18,11 +17,8 @@ void init_game() {
     keypad(win, true);
     curs_set(0);
 }
-
 int main(int argc, char **argv) {
     init_game();
-
-    wclear(win);
     mvwprintw(win, 2, 2, "Nuova Partita");
     mvwprintw(win, 4, 2, "Shop");
     mvwprintw(win, 6, 2, "Esci dal Gioco");
@@ -32,7 +28,6 @@ int main(int argc, char **argv) {
         
     ch = wgetch(win);
     while (!exit){
-        wclear(win);
 
         switch (ch) {
             case 'n':
