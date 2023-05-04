@@ -13,59 +13,47 @@ void init_game() {
     win = newwin(MAX_Y, MAX_X, 0, 0);
     refresh();
     box(win, 0, 0);
+    refresh();
     wrefresh(win);
     keypad(win, true);
     curs_set(0);
 }
 int main(int argc, char **argv) {
     init_game();
-    mvwprintw(win, 2, 2, "Nuova Partita");
-    mvwprintw(win, 4, 2, "Shop");
-    mvwprintw(win, 6, 2, "Esci dal Gioco");
-    wrefresh(win);
+    char menu[3][20] = {"Nuova Partita", "Shop", "Esci dal Gioco"};
     bool exit=false;
-    char ch;
-        
-    ch = wgetch(win);
+    int ch;
+  
+    int scelta = 0;    
+    
     while (!exit){
-
+         for (int i = 0; i<3;i++){
+            if (scelta==i) wattron(win, A_REVERSE);
+                mvwprintw(win, 2*(i+1), 2, "%s", menu[i]);
+                wattroff(win, A_REVERSE);
+        }
+          box(win, 0, 0);
+          ch = wgetch(win);
         switch (ch) {
-            case 'n':
-                wattron(win, A_STANDOUT);
-                mvwprintw(win, 2, 2, "Nuova Partita");
-                wattroff(win, A_STANDOUT);
-                mvwprintw(win, 4, 2, "Shop");
-                mvwprintw(win, 6, 2, "Esci dal Gioco");
-                wrefresh(win);
+            
+            case KEY_UP:
+                if (scelta>0){
+                  scelta--;
+                } else {
+                    scelta = 2;
+                }
                 break;
-            case 's':
-                wattron(win, A_STANDOUT);
-                mvwprintw(win, 4, 2, "Shop");
-                wattroff(win, A_STANDOUT);
-                mvwprintw(win, 2, 2, "Nuova Partita");
-                mvwprintw(win, 6, 2, "Esci dal Gioco");
-                wrefresh(win);
-                break;
-            case 'e':
-                wattron(win, A_STANDOUT);
-                mvwprintw(win, 6, 2, "Esci dal Gioco");
-                wattroff(win, A_STANDOUT);
-                mvwprintw(win, 2, 2, "Nuova Partita");
-                mvwprintw(win, 4, 2, "Shop");
-                wrefresh(win);
-                break;
-            case 'q':
-                exit=true;
-                break;
-            default:
-                mvwprintw(win, 2, 2, "Nuova Partita");
-                mvwprintw(win, 4, 2, "Shop");
-                mvwprintw(win, 6, 2, "Esci dal Gioco");
-                wrefresh(win);
+            case KEY_DOWN:
+                if (scelta<2){
+                  scelta++;
+                } else {
+                    scelta = 0;
+                }
                 break;
         }
-        
-        if (ch == 'n') {
+       
+        if (ch == 10) {
+            if (scelta==0){
             wclear(win);
             srand(time(0));
             keypad(win, TRUE);
@@ -146,6 +134,7 @@ int main(int argc, char **argv) {
                     break;
                 }
             }
+        }
         }nodelay(win, false);
             wclear(win);
     }
