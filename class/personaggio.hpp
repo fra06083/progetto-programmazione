@@ -42,7 +42,6 @@ public:
         if (x< MAX_X- 1){
         mvwaddch(win, y,x + dx, ' ');
         x++;
-        if(isJumping) y--;
         mvwaddch(win, y,x + dx, '@');
         }
         if (map.isPlatform(x+ dx, y)) {
@@ -74,9 +73,8 @@ public:
     int newY= y+dy;
     // Muovi il personaggio verso sinistra
     if(x > 0){
-        mvwaddch(win, y, x+ dx, ' ');
+        mvwaddch(win, y, x- dx, ' ');
         x--;
-        if(isJumping) y--;
         mvwaddch(win, y, x+ dx, '@');
         }
     if (map.isPlatform(newX, y+dy)) {

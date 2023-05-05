@@ -23,7 +23,6 @@ int main(int argc, char **argv) {
     char menu[3][20] = {"Nuova Partita", "Shop", "Esci dal Gioco"};
     bool exit=false;
     int ch;
-  
     int scelta = 0;    
     
     while (!exit){
@@ -53,6 +52,7 @@ int main(int argc, char **argv) {
         }
        
         if (ch == 10) {
+            if (scelta == 2) exit = true;
             if (scelta==0){
             wclear(win);
             srand(time(0));
@@ -111,13 +111,10 @@ int main(int argc, char **argv) {
                         player.isJumping=true;
                         break;
                     case KEY_LEFT:
-                        player.move_left(-1, 0, map, win);
+                        player.move_left(1, 0, map, win);
                         break;
                     case KEY_RIGHT:
                         player.move_right(1, 0, map, win);
-                        break;
-                    case 'q':
-                        game_over = true;
                         break;
                 }
 
@@ -129,6 +126,7 @@ int main(int argc, char **argv) {
                 if (!player.isAlive) {
                     wclear(win);
                     mvprintw(MAX_Y / 2, MAX_X/ 2, "Game Over!");
+                    timeout(1000);
                     wrefresh(win);
                     wgetch(win);
                     break;
