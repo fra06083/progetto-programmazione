@@ -3,8 +3,9 @@
 #include <ncurses.h>
 #include <iostream>
 #include <ctime>
-
+#include <cstring>
 WINDOW *win;
+
 
 void init_game() {
     initscr();
@@ -20,7 +21,7 @@ void init_game() {
 }
 int main(int argc, char **argv) {
     init_game();
-    char menu[3][20] = {"Nuova Partita", "Shop", "Esci dal Gioco"};
+    char menu[3][20] = {"NUOVA PARTITA", "SHOP", "ESCI DAL GIOCO"};
     bool exit=false;
     int ch;
     int scelta = 0;    
@@ -28,7 +29,7 @@ int main(int argc, char **argv) {
     while (!exit){
          for (int i = 0; i<3;i++){
             if (scelta==i) wattron(win, A_REVERSE);
-                mvwprintw(win, 2*(i+1), 2, "%s", menu[i]);
+                mvwprintw(win, (MAX_Y/2)+(4*i)-4, MAX_X/2 - strlen(menu[i])/2, "%s", menu[i]);
                 wattroff(win, A_REVERSE);
         }
           box(win, 0, 0);
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
             timeout(100);
 
             Map map;
-            Player player(MAX_X / 2,MAX_Y / 2);
+            Player player(0,MAX_Y-2);
             player.init(map);
 
             bool game_over = false;
@@ -82,12 +83,15 @@ int main(int argc, char **argv) {
                  // Check if player is jumping
                 if (player.isJumping) {
                 // Update player jump
-                player.updateJump(map);}
+                mvwprintw(win, player.y, player.x, "%s", " ");
+                wrefresh(win);
+                player.updateJump(map);
+                }
 
 
 
                 // Draw player
-                
+          /*      
                 if (player.isJumping) {
                     if (player.jumpHeight > 0) {
                         mvprintw(player.y, player.x, " @ ");
@@ -98,10 +102,11 @@ int main(int argc, char **argv) {
                     } else {
                         mvprintw(player.y, player.x, " @ ");
                     }
-                } else {
+                } else { */
+               
                     mvprintw(player.y, player.x, "@");
-                }
-                                                       
+                /*}*/
+                                                        
                refresh(); 
 
                 int ch = wgetch(win);

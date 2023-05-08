@@ -1,13 +1,15 @@
 #ifndef MAP_H
 #define MAP_H
-
 #include "map.cpp"
-#define MAX_X 80
 #define MAX_Y 24
+#define MAX_X 80
+
 class Map {
 public:
+    //valori max y e max x
     bool map[MAX_Y][MAX_X];
     Map() {
+         
         generateMap();
     }
 
