@@ -11,17 +11,16 @@ void Layout::init_screen()
 }
 void Layout::draw_box()
 {
-    this->clearwin();
     box(stdscr, 0, 0);
     box(game, 0, 0);
-    wrefresh(game);
+    refresh();
 }
 void Layout::clearwin()
 {
     clear();
     refresh();
 }
-void Layout::main_menu()
+int Layout::main_menu()
 {
     char menu[3][20] = {"NUOVA PARTITA", "SHOP", "ESCI DAL GIOCO"};
     bool exit = false;
@@ -65,23 +64,10 @@ void Layout::main_menu()
             break;
         case '\n':
             exit = true;
-            if (scelta == 1)
-            {
-                ingame = true;
-                this->draw_box();
-                refresh();
-                // disegna solo il box, quando avremo la classe Game gestirà lui la partita
-                // layout si preoccupa solo di dare il template al gioco come se fossero
-                // due componenti diverse
-            }
-            else if (scelta == 2)
-            {
-            } // shop fuori gioco???
-            else
-                refresh();
-                endwin();
+            return scelta + 1;
         }
     }
+        return 0;
 }
 /* void Layout::draw_player(int x, int y){
         mvwprintw(game, y, x,"@");  // Testa

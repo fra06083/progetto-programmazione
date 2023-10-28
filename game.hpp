@@ -7,6 +7,7 @@ private:
   Layout *layout;
   Player *player;
   Map *map;
+  bool quit = false;
 
 public:
   Game(Layout *l, Map *m, Player *p);

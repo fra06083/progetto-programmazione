@@ -9,20 +9,16 @@ Player::Player(int startX, int startY, Map *m, WINDOW *g) : x(startX), y(startY)
 }
 void Player::draw()
 {
-    mvwprintw(game, y, x, "@");          // Testa
-    mvwprintw(game, y + 1, x, "|");      // Corpo
-    mvwprintw(game, y + 1, x - 1, "/");  // Braccio sinistro
-    mvwprintw(game, y + 1, x + 1, "\\"); // Braccio destro
-    mvwprintw(game, y + 2, x - 1, "/");  // Gamba sinistra
-    mvwprintw(game, y + 2, x + 1, "\\"); // Gamba destra
+    mvwprintw(game, y, x, "@");
+    wrefresh(game);
 }
 void Player::init()
 {
     // Trova la piattaforma più in basso nella mappa
     int lowestY = 0;
-    for (int i = 0; i < MAX_X; i++)
+    for (int i = 2; i < MAX_X; i++)
     {
-        for (int j = 0; j < MAX_Y; j++)
+        for (int j = 2; j < MAX_Y; j++)
         {
             if (map->isPlatform(i, j) && j > lowestY)
             {
