@@ -4,12 +4,12 @@
 class Layout
 {
 private:
-  int width, height;
   const int gwidth = 80;
   const int gheight = 24;
   bool ingame = false;
 
 public:
+  int width, height, gx, gy;
   WINDOW *game;
   void init_screen();
   int main_menu();

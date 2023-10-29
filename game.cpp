@@ -37,24 +37,31 @@ void Game::run()
             {
                 clear();
                 // Draw map
-                for (int i = 2; i < MAX_X; i++)
+                for (int i = 0; i < MAX_X; i++)
                 {
-                    for (int j = 2; j < MAX_Y; j++)
+                    for (int j = 0; j < MAX_Y; j++)
                     {
                         if (map->isPlatform(i, j))
                         {
                             move(j, i);
-                            addch('=');
+                            mvwprintw(layout->game, j, i, "=");
                         }
                     }
                 }
                  layout->draw_box();
-                 player->draw();
-            int s = getch();
-            if (s) {
+                 player->draw(layout->game);
+            int ch = getch();
+            if (ch == 'a' || ch == 'A' || ch == KEY_LEFT){
+               player->p_move(layout->game, 'l');
+            }
+            if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
+               player->p_move(layout->game, 'r');
+            }
+            if (ch == 'w' || ch == 'W' || ch == KEY_UP){
+               quit = true;
                 refresh(); endwin();
-          //  }
-        }
+            }
+                
         }
         }
             refresh();

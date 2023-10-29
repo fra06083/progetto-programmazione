@@ -2,12 +2,8 @@
 #include <iostream>
 #include <ctime>
 #include "personaggio.hpp"
-Player::Player(int startX, int startY, Map *m, WINDOW *g) : x(startX), y(startY), jumpHeight(4), isAlive(true), isJumping(false), gravity(1), bodyHeight(4)
-{
-    map = m;
-    game = g;
-}
-void Player::draw()
+Player::Player(int startX, int startY, Map *m) : x(startX), y(startY), map(m), jumpHeight(4), isAlive(true), isJumping(false), gravity(1), bodyHeight(4){}
+void Player::draw(WINDOW *game)
 {
     mvwprintw(game, y, x, "@");
     wrefresh(game);
@@ -27,16 +23,13 @@ void Player::init()
         }
     }
     x = 1;
-    y = lowestY - bodyHeight; //- bodyHeight; // Posiziona il baricentro dello stickman sotto le gambe, sopra la piattaforma più bassa trovata
+    y = MAX_Y-2; //- bodyHeight; // Posiziona il baricentro dello stickman sotto le gambe, sopra la piattaforma più bassa trovata
 }
-void Player::p_move()
+void Player::p_move(WINDOW *game, char m = 'r')
 {
     int oldx = x;
     int oldy = y;
-    int ch = wgetch(game);
-    switch (ch)
-    {
-    case KEY_UP:
+
         // Salva la posizione corrente del cursore
 
         // Itera attraverso le posizioni intermedie
@@ -67,39 +60,31 @@ void Player::p_move()
 
 // Ripristina la posizione del cursore
          move(oldx, oldy);*/
-        isJumping = true;
-        break;
-    case KEY_LEFT:
+     //   isJumping = true;
+   if (m == 'l' && x > 1){
         mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
         x -= 1;
-        draw(); // Disegno del personaggio nella nuova posizione
-
+        draw(game); // Disegno del personaggio nella nuova posizione
+   }
         // Controllo se il giocatore è caduto dalla mappa
         if (x < 0)
         {
             isAlive = false;
         }
-        break;
-    case KEY_RIGHT:
+    if (m == 'r' && x<MAX_X-1){
         mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
         x += 1;
-        draw(); // Disegno del personaggio nella nuova posizione
-
-        // Controllo se il giocatore è caduto dalla mappa
-        if (x >= MAX_X)
-        {
-            isAlive = false;
-        }
-        break;
+        draw(game); // Disegno del personaggio nella nuova posizione
+     
     }
 }
-void Player::jump()
+void Player::jump(WINDOW *game)
 {
     if (!map->isPlatform(x, y - 1))
     {
         mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
         y -= 3;
-        draw(); // Disegno del personaggio nella nuova posizione
+        draw(game); // Disegno del personaggio nella nuova posizione
     }
 }
 void Player::updateJump()

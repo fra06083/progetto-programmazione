@@ -9,7 +9,6 @@ class Player
 public:
     double jumpTime = 0.3;
     Map *map;
-    WINDOW *game;
     int x, y;
     bool isAlive;
     int gravity;
@@ -17,11 +16,11 @@ public:
     int bodyHeight;
     int jumpHeight;
 
-    Player(int startX, int startY, Map *m, WINDOW *g);
-    void draw();
+    Player(int startX, int startY, Map *m);
+    void draw(WINDOW *g);
     void init();
-    void p_move();
-    void jump();
+    void p_move(WINDOW *g, char m);
+    void jump(WINDOW *g);
     void updateJump();
     void checkCollision();
 

@@ -8,6 +8,7 @@ void Layout::init_screen()
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, height, width);
     game = subwin(stdscr, gheight + 3, gwidth + 3, START_Y, START_X);
+    getmaxyx(game, gx, gy);
 }
 void Layout::draw_box()
 {
@@ -38,7 +39,7 @@ int Layout::main_menu()
 
         box(stdscr, 0, 0);
         refresh();
-        ch = wgetch(stdscr);
+        ch = getch();
 
         switch (ch)
         {
