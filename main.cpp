@@ -1,25 +1,20 @@
-#include <ncurses.h>
-// CLASSI FUNZIONI DA IMPLEMENTARE
-using namespace std;
-//  endwin(); termina il gioco
 
-int max_x, max_y;
-WINDOW *win;
-// inizializza la schermata mx max x schermata, my max y schermata
-void init_game(){
-    initscr();
-    noecho();
-    getmaxyx(stdscr, max_y, max_x);
-    win = newwin(max_y, max_x, 0, 0);
-    refresh();
-    box(win, 0, 0);
-    keypad(win, true);
-}
-int main(){
-    init_game();
-    mvwprintw(win, 1, 1, "Main Menu");
-    wrefresh(win);
-    int c = getch();
-    endwin();
+//comando compilazione: g++ main.cpp class/layout.cpp class/map.cpp class/personaggio.cpp game.cpp -lncurses -o test
+// #include "class/personaggio.hpp"
+// #include "class/map.hpp"
+#include "game.hpp"
+#include <iostream>
+#include <ctime>
+#include <cstring>
+
+int main(int argc, char **argv)
+{
+    // qui faremo la dichiarazione dei puntatori con la macroclasse che può gestirli
+    Layout *layout = new Layout();
+    Map *map = new Map();
+    Player *player = new Player(MAX_X-START_X+1, MAX_Y-2, map); // refers to layout
+    Game *game = new Game(layout, map, player);
+    game->run(); // LOOP per non chiudere il gioco
+
     return 0;
 }
