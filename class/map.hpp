@@ -13,6 +13,8 @@ public:
     void generateMap();
 
     bool isPlatform(int x, int y);
+    bool platformAbove(int x, int y);
+    bool platformUnder(int x, int y);
 };
 
 #endif

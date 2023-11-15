@@ -2,7 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include "personaggio.hpp"
-Player::Player(int startX, int startY, Map *m) : x(startX), y(startY), map(m), jumpHeight(4), isAlive(true), isJumping(false), gravity(1), bodyHeight(4){}
+Player::Player(int startX, int startY, Map *m) : x(startX), y(startY), map(m), jumpHeight(7), isAlive(true), isJumping(false), gravity(1), bodyHeight(1){}
 void Player::draw(WINDOW *game)
 {
     mvwprintw(game, y, x, "@");
@@ -79,26 +79,171 @@ void Player::p_move(WINDOW *game, char m = 'r')
     }
 }
 void Player::jump(WINDOW *game)
-{
-    if (!map->isPlatform(x, y - 1))
-    {
-        mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
-        y -= 3;
-        draw(game); // Disegno del personaggio nella nuova posizione
+{   halfdelay(10);
+    
+    int i=1; bool a=true;
+    
+    while (i<8 && a){ 
+        if(map->platformAbove(x,y)) {
+            a=false;
+        } 
+        else{
+           
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+            y=y-1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i+1;
+        }
     }
-}
+    a=true;
+    while (i>1 && a){ 
+        if(map->platformUnder(x,y)) {
+            a=false;
+        } 
+        else{
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+           
+            y=y+1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i-1;
+      }
+    }
+  }
+void Player::jump_left(WINDOW *game){
+      halfdelay(10);
+    
+    int i=1; bool a=true;
+    
+  
+    while (i<8 && a){ 
+        if(map->platformAbove(x,y)) {
+            a=false;
+        } 
+        else{
+           
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+            if(i%2==0){
+                x=x-1;
+            }
+            y=y-1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i+1;
+        }
+    }
+    a=true;
+    while (i>1 && a){ 
+        if(map->platformUnder(x,y)) {
+            a=false;
+        } 
+        else{
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+            if(i%2==0){
+                x=x-1;
+            }
+            y=y+1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i-1;
+      }
+    }
+  }
+
+void Player::jump_right(WINDOW *game)
+{   halfdelay(10);
+    
+    int i=1; bool a=true;
+    
+    while (i<8 && a){ 
+        if(map->platformAbove(x,y)) {
+            a=false;
+        } 
+        else{
+           
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+            if(i%2==0){
+                x=x+1;
+            }
+            y=y-1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i+1;
+        }
+    }
+    a=true;
+    while (i>1 && a){ 
+        if(map->platformUnder(x,y)) {
+            a=false;
+        } 
+        else{
+            mvwaddch(game, y, x, ' ');
+            wrefresh(game);
+            napms(200);
+            if(i%2==0){
+                x=x+1;
+            }
+           
+            y=y+1;
+            // Salto verso l'alto
+            mvwaddch(game, y, x, '@');
+            wrefresh(game);
+            napms(200);
+            i=i-1;
+      }
+    }
+  }
+
+
+        
+       
+
 void Player::updateJump()
 {
     // If the player is jumping
     if (isJumping)
     {
         // Move the player up
-        int i = 0;
+        int i = 1;
         while (i <= jumpHeight)
         {
             y--;
 
             i = i + 1;
+            // Check if the player has hit a platform
+            if (map->isPlatform(x, y))
+            {
+                // Stop the player from jumping
+                isJumping = false;
+            }
+        }
+        napms(500);
+        while (i >=1)
+        {
+            y++;
+
+            i = i - 1;
             // Check if the player has hit a platform
             if (map->isPlatform(x, y))
             {

@@ -45,5 +45,27 @@ bool Map::isPlatform(int x, int y)
     {
         return false;
     }
+    
     return map[y][x];
 }
+bool Map::platformAbove(int x, int y){
+     if (map[y-1][x]){
+        return true;
+        
+     }
+     else {
+        return false;
+        
+     }
+}
+bool Map::platformUnder(int x, int y){
+     if (map[y+1][x]){
+        return true;
+        
+     }
+     else {
+        return false;
+        
+     }
+}
+

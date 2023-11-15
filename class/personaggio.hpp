@@ -20,7 +20,9 @@ public:
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    void jump(WINDOW *g);
+    void jump(WINDOW *game);
+    void jump_right(WINDOW *g);
+    void jump_left(WINDOW *game);
     void updateJump();
     void checkCollision();
 
