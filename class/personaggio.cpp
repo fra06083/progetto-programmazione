@@ -78,56 +78,66 @@ void Player::p_move(WINDOW *game, char m = 'r')
         x += 1;
         draw(game); // Disegno del personaggio nella nuova posizione
     }
+    while (!map->platformUnder(x, y) && !this->isJumping){
+      mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
+        y += 1;
+        napms(50);
+        draw(game);
+    }
 }
 void Player::jump(WINDOW *game) {
     this->isJumping = true;
     int i = 1;
     bool a = true;
-             nodelay(game, false);
-    cbreak();
-
+      cbreak();
+             nodelay(game, true);
+    noecho();
     while ((i <= this->jump_max) && a) {
-        
-        mvwaddch(game, y, x, ' ');
-        wrefresh(game);
         int ch = getch();
-        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
-            if (!map->isPlatform(x-1, y))
-            this->p_move(game, 'l');
-        }
-        if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
-            if (!map->isPlatform(x+1, y))
-            this->p_move(game, 'r');
-        }
-        if (map->platformAbove(x, y)) {
+                if (map->platformAbove(x, y)) {
                 a = false;
             } else {
                 y = y - 1;
                 i++;
             }
+        mvwaddch(game, y+1, x, ' ');
+        wrefresh(game);
+        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
+            if (!map->isPlatform(x-1, y))
+            this->p_move(game, 'l');
+        } else
+        if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
+            if (!map->isPlatform(x-1, y))
+            this->p_move(game, 'r');
+        } else {
         napms(100);
         mvwaddch(game, y, x, '@');
         wrefresh(game);
+        }
     }
 a = true;
 while (i != 1 && a){
-            // Caduta verso il basso
-                    int ch = getch();
-        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
-            this->p_move(game, 'l');
-        }
-        if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
-            this->p_move(game, 'r');
-        }
-            if (map->platformUnder(x, y)) {
+ int ch = getch();
+                if (map->platformUnder(x, y)) {
                 a = false;
             } else {
                 y = y + 1;
                 i--;
             }
-                    napms(100);
+        mvwaddch(game, y-1, x, ' ');
+        wrefresh(game);
+        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
+            if (!map->isPlatform(x+1, y))
+            this->p_move(game, 'l');
+        } else
+        if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
+            if (!map->isPlatform(x+1, y))
+            this->p_move(game, 'r');
+        } else {
+        napms(100);
         mvwaddch(game, y, x, '@');
         wrefresh(game);
+        }
         }
     this->isJumping = false;
         // Disegna il personaggio nella nuova posizione
