@@ -51,6 +51,7 @@ void Game::run()
                  layout->draw_box();
                  player->draw(layout->game);
             int ch = getch();
+            if (!player->isJumping){
             if (ch == 'a' || ch == 'A' || ch == KEY_LEFT){
                player->p_move(layout->game, 'l');
             }
@@ -59,23 +60,12 @@ void Game::run()
             }
             if (ch == 'w' || ch == 'W' || ch == KEY_UP ){
                //quit = true;
-                char c=getch();
-    
-                if(c == 'a' || c == 'A' || c == KEY_LEFT){
-                    player->jump_left(layout->game);
-                }
-                else if(c == 'd' || c== 'D' || c== KEY_RIGHT){
-                    player->jump_right(layout->game);
-                }
-                else{   
                     player->jump(layout->game);              
-       
-                }
             
                 //player->isJumping=true;
                //player->updateJump();  refresh(); endwin();
             }
-            if(ch=='e') {quit=true;}  
+            }
         }
         }
             refresh();
