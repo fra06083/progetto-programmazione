@@ -34,7 +34,7 @@ void Game::run()
             player->init();
             bool game_over = false;
             while (!quit)
-            { halfdelay(10);
+            { halfdelay(1);
                 clear();
                 // Draw map
                 for (int i = 0; i < MAX_X; i++)
@@ -51,7 +51,6 @@ void Game::run()
                  layout->draw_box();
                  player->draw(layout->game);
             int ch = getch();
-            if (!player->isJumping){
             if (ch == 'a' || ch == 'A' || ch == KEY_LEFT){
                player->p_move(layout->game, 'l');
             }
@@ -60,12 +59,15 @@ void Game::run()
             }
             if (ch == 'w' || ch == 'W' || ch == KEY_UP ){
                //quit = true;
-                    player->jump(layout->game);              
+                  
+                player->jump(layout->game);              
+       
+                
             
                 //player->isJumping=true;
                //player->updateJump();  refresh(); endwin();
             }
-            }
+            if(ch=='e') {quit=true;}  
         }
         }
             refresh();
