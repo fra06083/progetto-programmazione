@@ -1,9 +1,10 @@
 #include "game.hpp"
-Game::Game(Layout *l, Map *m, Player *p)
+Game::Game(Layout *l, Map *m, Player *p, Nemico *en)
 {
     this->layout = l;
     this->map = m;
     this->player = p;
+    this->enemy = en;
 }
 void Game::run()
 {
@@ -32,6 +33,7 @@ void Game::run()
         if (scelta == 1){ // INIZIA PARTITA
             map->generateMap();
             player->init();
+            
             bool game_over = false;
             while (!quit)
             { halfdelay(1);
@@ -50,6 +52,9 @@ void Game::run()
                 }
                  layout->draw_box();
                  player->draw(layout->game);
+                 enemy->move(player->x,player->y);
+                 enemy->draw(layout->game);
+                 wrefresh(layout->game);
             int ch = getch();
             if (ch == 'a' || ch == 'A' || ch == KEY_LEFT){
                player->p_move(layout->game, 'l');
@@ -60,7 +65,7 @@ void Game::run()
             if (ch == 'w' || ch == 'W' || ch == KEY_UP ){
                //quit = true;
                   
-                player->jump(layout->game);              
+                player->jump(layout->game, enemy);              
        
                 
             
@@ -68,6 +73,7 @@ void Game::run()
                //player->updateJump();  refresh(); endwin();
             }
             if(ch=='e') {quit=true;}  
+            
         }
         }
             refresh();
