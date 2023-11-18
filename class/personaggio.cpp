@@ -84,7 +84,7 @@ void Player::p_move(WINDOW *game, char m = 'r')
         draw(game);
     }
 }
-void Player::jump(WINDOW *game) {
+void Player::jump(WINDOW *game, Nemico *enemy) {
     this->isJumping = true;
     int i = 1;
 
@@ -96,13 +96,18 @@ void Player::jump(WINDOW *game) {
             y = y - 1;
             i++;
         }
-
+        
         mvwaddch(game, y + 1, x, ' ');
+        enemy->cancella(game);
         wrefresh(game);
         napms(50);
+        enemy->move(x, y);
+        enemy->draw(game);
         mvwaddch(game, y, x, '@');
         wrefresh(game);
-
+        
+        
+        
         // Effettua un passo laterale durante il salto se viene premuto un tasto.
         
         int ch = getch();
@@ -123,13 +128,20 @@ void Player::jump(WINDOW *game) {
             y = y + 1;
             i--;
         }
-
+        
         mvwaddch(game, y - 1, x, ' ');
+        enemy->cancella(game);
         wrefresh(game);
         napms(50);
+        
+        enemy->move(x, y);
+        enemy->draw(game);
+        
         mvwaddch(game, y, x, '@');
         wrefresh(game);
-
+        
+        
+        
         int ch = getch();
         if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
             if (!map->isPlatform(x - 1, y))
@@ -202,5 +214,4 @@ void Player::checkCollision()
         isJumping = false;
         jumpHeight = 0;
     }
-}
 }
