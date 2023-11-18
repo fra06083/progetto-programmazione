@@ -4,10 +4,11 @@
 #define MAX_X 80
 #include <ncurses.h>
 #include "map.hpp"
+#include "enemy.hpp"
 class Player
 {
 public:
-    double jumpTime = 0.3;
+    //double jumpTime = 0.3;
     Map *map;
     int x, y, jump_max;
     bool isAlive;
@@ -16,13 +17,11 @@ public:
     int bodyHeight;
     int jumpHeight;
 
-    Player(int startX, int startY, int jump_max, Map *m);
+    Player(int startX, int startY, int jump_max,Map *m);
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    void jump(WINDOW *game);
-    void jump_right(WINDOW *g);
-    void jump_left(WINDOW *game);
+    void jump(WINDOW *game, Nemico *enemy);
     void updateJump();
     void checkCollision();
 
