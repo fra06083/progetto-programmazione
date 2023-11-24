@@ -22,8 +22,6 @@ public:
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    void jump(WINDOW *game, Nemico *enemy, p_pro proiettile);
-    void updateJump();
     void checkCollision();
 
     /*
