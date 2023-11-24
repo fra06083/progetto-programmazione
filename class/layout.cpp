@@ -7,7 +7,7 @@ void Layout::init_screen()
     curs_set(FALSE);
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, height, width);
-    game = subwin(stdscr, gheight, gwidth, 0, 0);
+    game = subwin(stdscr, gheight, gwidth, START_X, START_Y);
     getmaxyx(game, gx, gy);
 }
 void Layout::draw_box()
