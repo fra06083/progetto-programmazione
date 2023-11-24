@@ -7,7 +7,7 @@ void Layout::init_screen()
     curs_set(FALSE);
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, height, width);
-    game = subwin(stdscr, gheight, gwidth, START_X, START_Y);
+    game = subwin(stdscr, gheight + 3, gwidth + 3, START_Y, START_X);
     getmaxyx(game, gx, gy);
 }
 void Layout::draw_box()
@@ -70,11 +70,3 @@ int Layout::main_menu()
     }
         return 0;
 }
-/* void Layout::draw_player(int x, int y){
-        mvwprintw(game, y, x,"@");  // Testa
-        mvwprintw(game, y +1, x, "|"); // Corpo
-        mvwprintw(game, y +1, x - 1, "/");  // Braccio sinistro
-        mvwprintw(game, y +1, x + 1, "\\");  // Braccio destro
-        mvwprintw(game, y+2, x -1, "/");  // Gamba sinistra
-        mvwprintw(game, y+2, x + 1, "\\");  // Gamba destra
-    } */

@@ -16,4 +16,5 @@ public:
   void draw_box();
   void clearwin();
   void draw_player(int x, int y);
+  
 };

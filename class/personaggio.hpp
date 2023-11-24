@@ -5,6 +5,7 @@
 #include <ncurses.h>
 #include "map.hpp"
 #include "enemy.hpp"
+#include "proiettile.hpp"
 class Player
 {
 public:
@@ -21,7 +22,7 @@ public:
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    void jump(WINDOW *game, Nemico *enemy);
+    void jump(WINDOW *game, Nemico *enemy, p_pro proiettile);
     void updateJump();
     void checkCollision();
 

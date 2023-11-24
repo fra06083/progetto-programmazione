@@ -27,9 +27,7 @@ void Player::init()
 }
 void Player::p_move(WINDOW *game, char m = 'r')
 {
-    int oldx = x;
-    int oldy = y;
-
+    
         // Salva la posizione corrente del cursore
 
         // Itera attraverso le posizioni intermedie
@@ -82,128 +80,6 @@ void Player::p_move(WINDOW *game, char m = 'r')
         y += 1;
         napms(50);
         draw(game);
-    }
-}
-void Player::jump(WINDOW *game, Nemico *enemy) {
-    this->isJumping = true;
-    int i = 1;
-
-    while (i <= this->jump_max) {
-        
-        if (map->platformAbove(x, y)) {
-            break;  // Interrompi il salto se c'è una piattaforma sopra.
-        } else {
-            y = y - 1;
-            i++;
-        }
-        
-        mvwaddch(game, y + 1, x, ' ');
-        enemy->cancella(game);
-        wrefresh(game);
-        napms(50);
-        enemy->move(x, y);
-        enemy->draw(game);
-        mvwaddch(game, y, x, '@');
-        wrefresh(game);
-        
-        
-        
-        // Effettua un passo laterale durante il salto se viene premuto un tasto.
-        
-        int ch = getch();
-        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
-            if (!map->isPlatform(x - 1, y))
-                this->p_move(game, 'l');
-        } else if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
-            if (!map->isPlatform(x + 1, y))
-                this->p_move(game, 'r');
-        }
-    }
-
-    // Ripristina la posizione iniziale del personaggio dopo il salto.
-    while (i != 1) {
-        if (map->platformUnder(x, y)) {
-            break;  // Interrompi la discesa se c'è una piattaforma sotto.
-        } else {
-            y = y + 1;
-            i--;
-        }
-        
-        mvwaddch(game, y - 1, x, ' ');
-        enemy->cancella(game);
-        wrefresh(game);
-        napms(50);
-        
-        enemy->move(x, y);
-        enemy->draw(game);
-        
-        mvwaddch(game, y, x, '@');
-        wrefresh(game);
-        
-        
-        
-        int ch = getch();
-        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT) {
-            if (!map->isPlatform(x - 1, y))
-                this->p_move(game, 'l');
-        } else if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
-            if (!map->isPlatform(x + 1, y))
-                this->p_move(game, 'r');
-        }
-    }
-
-    // Fine del salto, reimposta 'isJumping' a false.
-    this->isJumping = false;
-}
-
-
-
-        
-       
-
-void Player::updateJump()
-{
-    // If the player is jumping
-    if (isJumping)
-    {
-        // Move the player up
-        int i = 1;
-        while (i <= jumpHeight)
-        {
-            y--;
-
-            i = i + 1;
-            // Check if the player has hit a platform
-            if (map->isPlatform(x, y))
-            {
-                // Stop the player from jumping
-                isJumping = false;
-            }
-        }
-        napms(500);
-        while (i >=1)
-        {
-            y++;
-
-            i = i - 1;
-            // Check if the player has hit a platform
-            if (map->isPlatform(x, y))
-            {
-                // Stop the player from jumping
-                isJumping = false;
-            }
-        }
-        isJumping = false;
-    }
-    else
-    {
-        // Move the player down
-
-        // Check if the player has fallen off the map
-        if (y + bodyHeight >= MAX_Y)
-        {
-            isAlive = false;
-        }
     }
 }
 
