@@ -27,38 +27,6 @@ void Player::init()
 }
 void Player::p_move(WINDOW *game, char m = 'r')
 {
-    
-        // Salva la posizione corrente del cursore
-
-        // Itera attraverso le posizioni intermedie
-        /*for (int i = 0; i < 5; i++) {
-             // Sposta il cursore alla posizione desiderata
-            y=y-1;
-            move(x,y);
-
-
-             // Stampa il carattere
-            //draw(win);
-
-            // Attendi un breve intervallo di tempo
-            napms(100);
-        }
-        for (int i = 0; i < 5; i++) {
-        // Sposta il cursore alla posizione desiderata
-            y=y+1;
-            move(x,y);
-
-
-             // Stampa il carattere
-            //draw(win);
-
-            // Attendi un breve intervallo di tempo
-            napms(100);
-        }
-
-// Ripristina la posizione del cursore
-         move(oldx, oldy);*/
-     //   isJumping = true;
    if (m == 'l' && x > 1){
         mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
         x -= 1;
