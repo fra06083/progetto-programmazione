@@ -1,4 +1,3 @@
-
 //comando compilazione: g++ main.cpp class/layout.cpp class/map.cpp class/personaggio.cpp game.cpp class/enemy.cpp -lncurses -o test
 // #include "class/personaggio.hpp"
 // #include "class/map.hpp"
