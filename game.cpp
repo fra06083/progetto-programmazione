@@ -34,23 +34,6 @@ int Game::updateJ(WINDOW* game, Player *p, Map *map, bool isJump, int i){
 void Game::run()
 {   
     layout->init_screen();
-    /* if (scelta == 1)
-             {
-                 ingame = true;
-                 this->draw_box();
-                 refresh();
-                 // disegna solo il box, quando avremo la classe Game gestirà lui la partita
-                 // layout si preoccupa solo di dare il template al gioco come se fossero
-                 // due componenti diverse
-             }
-             else if (scelta == 2)
-             {
-             } // shop fuori gioco???
-             else
-                 refresh();
-                 endwin();
-         }
-         */
     int scelta = layout->main_menu();
     if (scelta)
     {
@@ -121,7 +104,7 @@ void Game::run()
                 } 
 
                 if(player->isJumping){
-                counter=updateJ(layout->game, player,map, player->isJumping, this->counter);
+                this->counter=updateJ(layout->game, player,map, player->isJumping, this->counter);
                 }
             }
         }
