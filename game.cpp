@@ -9,7 +9,7 @@ Game::Game(Layout *l, Map *m, Player *p, Nemico *en, p_pro pr)
         
     
 }
-int Game::updateJ(WINDOW* game, Player *p, Map *map, bool isJump, int i){
+int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
 
     if(i<=player->jump_max && !map->platformAbove(p->x, p->y)) {  // Interrompi il salto se c'è una piattaforma sopra. 
         p->y=p->y-1;
@@ -94,17 +94,21 @@ void Game::run()
                 if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
                     player->p_move(layout->game, 'r');
                 }
-                if ((ch == 'w' || ch == 'W' || ch == KEY_UP)&& !player->isJumping){
+                if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping)){
                     
                     
-                    player->isJumping=true;
+                    player->isJumping = true;
                 }
                 if(ch=='e') {
-                    quit=true;
+                    quit=true; 
                 } 
-
-                if(player->isJumping){
-                this->counter=updateJ(layout->game, player,map, player->isJumping, this->counter);
+               if (map->platformUnder(player->x, player->y)) player->fall = false;
+               if (!player->isJumping && !map->platformUnder(player->x, player->y)){
+                  player->fall = true;
+                  player->y++;
+               }
+                if(player->isJumping && !player->fall){
+                this->counter=updateJump(layout->game, player,map, player->isJumping, this->counter);
                 }
             }
         }

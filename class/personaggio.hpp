@@ -12,16 +12,12 @@ public:
     //double jumpTime = 0.3;
     Map *map;
     int x, y, jump_max;
-    bool isAlive;
+    bool isAlive, fall, isJumping;
     int gravity;
-    bool isJumping;
-    int bodyHeight;
-    int jumpHeight;
 
     Player(int startX, int startY, int jump_max,Map *m);
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    void checkCollision();
 };
 #endif // PERSONAGGIO_HPP

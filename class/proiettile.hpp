@@ -4,8 +4,8 @@
 #include <ncurses.h>
  struct lista_proiettili;
 class Proiettile {
-public:int x;
-    int y;
+public:
+    int x, y;
     bool sparato = false;
     Proiettile(int startX, int startY);
     void spara();
@@ -14,7 +14,6 @@ public:int x;
     bool haRaggiuntoFineSchermo(int screenWidth);
     void draw(WINDOW *game, int playerX, int playerY);
     bool isAttivo();
-
 
 };
 

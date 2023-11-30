@@ -2,7 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include "personaggio.hpp"
-Player::Player(int startX, int startY,int jump_m, Map *m) : x(startX),jump_max(jump_m), y(startY), map(m), jumpHeight(7), isAlive(true), isJumping(false), gravity(1), bodyHeight(1){}
+Player::Player(int startX, int startY,int jump_m, Map *m) : x(startX),jump_max(jump_m), y(startY), map(m), isAlive(true), isJumping(false), gravity(1){}
 void Player::draw(WINDOW *game)
 {
     mvwprintw(game, y, x, "@");
@@ -43,19 +43,5 @@ void Player::p_move(WINDOW *game, char m = 'r')
         draw(game); // Disegno del personaggio nella nuova posizione
      
     }
-    while (!map->platformUnder(x, y) && !this->isJumping){
-      mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
-        y += 1;
-        napms(50);
-        draw(game);
-    }
-}
 
-void Player::checkCollision()
-{
-    if (map->isPlatform(x, y + bodyHeight))
-    {
-        isJumping = false;
-        jumpHeight = 0;
-    }
 }

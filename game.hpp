@@ -17,10 +17,9 @@ private:
   p_pro proiettile;
   bool quit = false;
   int counter=0;
-
 public:
   Game(Layout *l, Map *m, Player *p, Nemico *en, p_pro pr);
-  int updateJ(WINDOW* game, Player *p, Map *map, bool isJump, int i);
+  int updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i);
   void run();
 
 };
