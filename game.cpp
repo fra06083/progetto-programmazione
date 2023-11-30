@@ -11,7 +11,7 @@ Game::Game(Layout *l, Map *m, Player *p, Nemico *en, p_pro pr)
 }
 int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
 
-    if(i<=player->jump_max && !map->platformAbove(p->x, p->y)) {  // Interrompi il salto se c'è una piattaforma sopra. 
+    if(i<=player->jump_max && !map->platformAbove(p->x, p->y) && !(p->y == 0)) {  // Interrompi il salto se c'è una piattaforma sopra. 
         p->y=p->y-1;
         i=i+1;
         mvwaddch(game, p->y + 1, p->x, ' ');
