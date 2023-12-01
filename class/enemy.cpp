@@ -3,39 +3,41 @@
 #include <ctime>
 #include "enemy.hpp"
 
-    Nemico::Nemico(int x, int y) : x_(x), y_(y) {}
+    Nemico::Nemico(int x, int y, int time) : x(x), y(y), time(time) {
+        this->countdown = time;
+    }
 
     void Nemico::draw(WINDOW *win)
     {
-        mvwprintw(win, y_, x_, "X");
+        mvwprintw(win, y, x, "X");
     }
     void Nemico::cancella(WINDOW *win)
     {
-        mvwprintw(win, y_, x_, " ");
+        mvwprintw(win, y, x, " ");
     }
     void Nemico::move(int playerX, int playerY)
     {
         // Calcola la direzione verso il giocatore
-        int deltaX = playerX - x_;
-        int deltaY = playerY - y_;
+        int deltaX = playerX - x;
+        int deltaY = playerY - y;
 
         // Sposta il nemico verso il giocatore
         if (deltaX > 0)
         {
-            x_++;
+            x++;
         }
         else if (deltaX < 0)
         {
-            x_--;
+            x--;
         }
 
         if (deltaY > 0)
         {
-            y_++;
+            y++;
         }
         else if (deltaY < 0)
         {
-            y_--;
+            y--;
         }
         
     }

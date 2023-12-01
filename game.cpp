@@ -16,7 +16,7 @@ int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
         i=i+1;
         mvwaddch(game, p->y + 1, p->x, ' ');
         wrefresh(game);
-        
+         
         mvwaddch(game, p->y, p->x, '@');
         wrefresh(game);
 
@@ -60,8 +60,18 @@ void Game::run()
                 }
                 layout->draw_box();
                 player->draw(layout->game);
+                if (!enemy->defeat){
                 enemy->move(player->x,player->y);
                 enemy->draw(layout->game);
+                } else {
+                    enemy->countdown--;
+                    if (enemy->countdown == 0) {
+                         mvwprintw(layout->game, 0, 0, "0");
+                        enemy->defeat = false;
+                        enemy->countdown = enemy->time;
+                        wrefresh(layout->game);
+                    }
+                }
                 wrefresh(layout->game);
 
                 
@@ -70,6 +80,11 @@ void Game::run()
                     while (count != NULL) {
                         if (count->pro->isAttivo()) {
                             count->pro->move(layout->game,proiettile);
+                            if (count->pro->x == enemy->x-1 || count->pro->x == enemy->x+1){
+                            enemy->cancella(layout->game);
+                            // CANCELLA PROIETTILE
+                            enemy->defeat = true;
+                            }
                             //count->pro->draw(layout->game,player->x,player->y);
                         }
                         count = count->next;

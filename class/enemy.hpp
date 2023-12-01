@@ -4,11 +4,11 @@
 
 class Nemico
 {
-private:
-    int x_;
-    int y_;
 public:
-    Nemico(int x, int y);
+    
+    int x, y, countdown, time;
+    bool defeat;
+    Nemico(int x, int y, int time);
 
     void draw(WINDOW *win);
     void cancella(WINDOW *win);

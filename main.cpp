@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     Layout *layout = new Layout();
     Map *map = new Map();
     Player *player = new Player(MAX_X-START_X+1, MAX_Y-2,8, map); // refers to layout
-    Nemico *enemy = new Nemico(50,12);
+    Nemico *enemy = new Nemico(50,12, 500);
     p_pro proiettile=NULL;
     Game *game = new Game(layout, map, player, enemy,proiettile);
     game->run(); // LOOP per non chiudere il gioco
