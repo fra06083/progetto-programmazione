@@ -1,3 +1,4 @@
+
 #include "game.hpp"
 Game::Game(Layout *l, Map *m, Player *p, Nemico *en, p_pro pr)
 {
@@ -16,7 +17,7 @@ int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
         i=i+1;
         mvwaddch(game, p->y + 1, p->x, ' ');
         wrefresh(game);
-         
+        
         mvwaddch(game, p->y, p->x, '@');
         wrefresh(game);
 
@@ -42,6 +43,7 @@ void Game::run()
             map->generateMap();
             player->init();
             bool game_over = false;
+            char p_direction='r'; //inizializzazione direzione proiettile
             while (!quit){
                 halfdelay(1);
                 
@@ -60,18 +62,8 @@ void Game::run()
                 }
                 layout->draw_box();
                 player->draw(layout->game);
-                if (!enemy->defeat){
-                enemy->move(player->x,player->y);
+                enemy->move(layout->game,map,player->x,player->y);
                 enemy->draw(layout->game);
-                } else {
-                    enemy->countdown--;
-                    if (enemy->countdown == 0) {
-                         mvwprintw(layout->game, 0, 0, "0");
-                        enemy->defeat = false;
-                        enemy->countdown = enemy->time;
-                        wrefresh(layout->game);
-                    }
-                }
                 wrefresh(layout->game);
 
                 
@@ -79,25 +71,21 @@ void Game::run()
                     p_pro count = proiettile;
                     while (count != NULL) {
                         if (count->pro->isAttivo()) {
-                            count->pro->move(layout->game,proiettile);
-                            if (count->pro->x == enemy->x-1 || count->pro->x == enemy->x+1){
-                            enemy->cancella(layout->game);
-                            // CANCELLA PROIETTILE
-                            enemy->defeat = true;
-                            }
+                            count->pro->move(layout->game,proiettile,count->pro->dir);
                             //count->pro->draw(layout->game,player->x,player->y);
                         }
                         count = count->next;
                     }
-                    proiettile = tail_delete(proiettile);
+                    proiettile = tail_delete(proiettile, map);
                 }
-
+                enemy->death(layout->game,map,proiettile);
                 
                 int ch = getch();
                 if(ch==' '){
 
                     Proiettile *p= new Proiettile(player->x, player->y);
                     p->spara();
+                    p->dir=p_direction;
                     proiettile=head_insert(proiettile, p);
                     proiettile->pro->draw(layout->game, player->x, player->y);
 
@@ -105,9 +93,11 @@ void Game::run()
                 }
                 if (ch == 'a' || ch == 'A' || ch == KEY_LEFT){
                     player->p_move(layout->game, 'l');
+                    p_direction='l';
                 }
                 if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT) {
                     player->p_move(layout->game, 'r');
+                    p_direction='r';
                 }
                 if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping)){
                     
