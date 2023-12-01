@@ -1,19 +1,19 @@
 #ifndef ENEMY_H
 #define ENEMY_H
-
-
+#include "map.hpp"
+#include "proiettile.hpp"
 class Nemico
 {
+private:
+    int x_;
+    int y_;
 public:
-    
-    int x, y, countdown, time;
-    bool defeat;
-    Nemico(int x, int y, int time);
-
+    Nemico(int x, int y);
+    bool dead =false;
     void draw(WINDOW *win);
     void cancella(WINDOW *win);
-    void move(int playerX, int playerY);
-    
+    void move(WINDOW *game, Map *map, int playerX, int playerY);
+    void death(WINDOW* game, Map *map, p_pro proiettile);
 
 
 };
