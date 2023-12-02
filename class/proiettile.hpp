@@ -3,13 +3,14 @@
 #include <iostream>
 #include <ncurses.h>
 #include "map.hpp"
+
  struct lista_proiettili;
 class Proiettile {
 public:
     char dir;//direction
     int x;
     int y;
-    bool sparato = false;
+    bool sparato = false, colpito=false;
     Proiettile(int startX, int startY);
     void spara();
     void move(WINDOW* game, lista_proiettili *proiettile, char m);
