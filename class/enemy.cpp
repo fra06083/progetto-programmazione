@@ -54,74 +54,75 @@
   }
 }
 
-void Nemico::death(WINDOW* game, Map *map, p_pro proiettile) {
-    if (proiettile != NULL) {
-        p_pro count = proiettile;
-        while (count != NULL) {
-            if(count->pro->x+1==x_ && count->pro->y==y_){
-               cancella(game);
-               dead=true;  
-            }
-            count = count->next;
-        }
-      
-    }
 
-    
-}
+// Funzione per l'inserimento di un nemico all'inizio della lista
 p_en e_head_insert(p_en& list, Nemico *enemy1){
-        p_en tmp=new lista_enemy;
-        tmp->enemy= enemy1;
-        tmp->next=list;
-        list=tmp;
-    
+    // Crea un nuovo nodo
+    p_en tmp = new lista_enemy;
+    // Assegna il nemico al nuovo nodo
+    tmp->enemy = enemy1;
+    // Collega il nuovo nodo alla lista
+    tmp->next = list;
+    // Aggiorna la testa della lista
+    list = tmp;
+    // Restituisci la lista aggiornata
     return list;
 }
 
-
+// Funzione per la rimozione di nemici colpiti dalla lista
 p_en e_tail_delete(p_en list, Map *map, p_pro p) {
+    // Nodo precedente nella lista
     p_en prevNode = NULL;
+    // Nodo corrente nella lista
     p_en currentNode = list;
+    // Proiettile corrente
     p_pro colpito = p;
 
+    // Itera attraverso i proiettili colpiti
     while (colpito != NULL) {
+        // Itera attraverso i nemici nella lista
         while (currentNode != NULL) {
-            // Verifica se colpito e currentNode sono entrambi non NULL prima di confrontare le coordinate
+            // Verifica se il proiettile ha colpito il nemico
             if (colpito->pro && currentNode->enemy && 
                 (colpito->pro->x + 1 == currentNode->enemy->x_ || 
                  colpito->pro->x - 1 == currentNode->enemy->x_ || 
                  colpito->pro->x == currentNode->enemy->x_) && 
                 colpito->pro->y == currentNode->enemy->y_) {
+                // Segna il nemico come morto
+                currentNode->enemy->dead = true;
+                // Segna il proiettile come colpito
+                colpito->pro->colpito = true;
 
-                colpito->pro->colpito=true;
+                // Salva il puntatore al prossimo nodo
                 p_en nextNode = currentNode->next;
+
+                // Elimina il nemico corrente dalla lista
                 delete currentNode->enemy;
                 delete currentNode;
 
+                // Aggiorna i collegamenti nella lista
                 if (prevNode != NULL) {
                     prevNode->next = nextNode;
                 } else {
                     list = nextNode;
                 }
 
+                // Sposta il puntatore al prossimo nodo
                 currentNode = nextNode;
             } else {
+                // Se il nemico non è stato colpito, passa al nodo successivo
                 prevNode = currentNode;
                 currentNode = currentNode->next;
             }
         }
 
-        // Reinizializza currentNode all'inizio del ciclo più esterno
+        // Reinizializza il puntatore al nodo corrente e al nodo precedente all'inizio delle liste
         currentNode = list;
+        prevNode = NULL;
+        // Passa al prossimo proiettile colpito
         colpito = colpito->next;
     }
 
+    // Restituisci la lista aggiornata
     return list;
-}
-
-
-
-
-
-    
 }
