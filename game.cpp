@@ -1,6 +1,6 @@
 
 #include "game.hpp"
-Game::Game(Layout *l, Map *m, Player *p, Nemico *en, p_pro pr)
+Game::Game(Layout *l, Map *m, Player *p, p_en en, p_pro pr)
 {
     this->layout = l;
     this->map = m;
@@ -44,6 +44,8 @@ void Game::run()
             player->init();
             bool game_over = false;
             char p_direction='r'; //inizializzazione direzione proiettile
+            int counter_nemici=100;
+            std::srand(std::time(0));
             while (!quit){
                 halfdelay(1);
                 
@@ -60,10 +62,52 @@ void Game::run()
                         }
                     }
                 }
+
                 layout->draw_box();
+
                 player->draw(layout->game);
-                enemy->move(layout->game,map,player->x,player->y);
-                enemy->draw(layout->game);
+                if(counter_nemici==100){
+                    int en_X= std::rand() % 79;
+                    int en_Y= std::rand() % 23;
+                    Nemico *en=new Nemico(en_X, en_Y);
+                    enemy=e_head_insert(enemy, en);
+                    enemy->enemy->draw(layout->game);
+                    counter_nemici=0;
+                    
+                }
+                counter_nemici=counter_nemici+1;
+                std::cerr<<counter_nemici;
+                if (enemy != NULL) {
+                    p_en count = enemy;
+                    p_en prev = NULL;
+                    while (count != NULL) {   
+                        if (!count->enemy->dead) {
+                            count->enemy->move(layout->game,map,player->x,player->y);
+                            count->enemy->draw(layout->game);
+                            //count = count->next;
+                            // Aggiorna il puntatore 'count' solo se il nemico non è morto
+                        
+                            prev = count;
+                            count = count->next;
+                        } 
+                        else {
+                            // Rimuovi il nemico morto dalla lista
+                            if (prev != NULL) {
+                                prev->next = count->next;
+                                delete count->enemy;
+                                delete count;
+                                count = prev->next;
+                            } else {
+                                enemy = count->next;
+                                delete count->enemy;
+                                delete count;
+                                count = enemy;
+                            }
+                        }
+                    }
+                    enemy= e_tail_delete(enemy, map, proiettile);
+                }
+                
                 wrefresh(layout->game);
 
                 
@@ -78,7 +122,7 @@ void Game::run()
                     }
                     proiettile = tail_delete(proiettile, map);
                 }
-                enemy->death(layout->game,map,proiettile);
+                
                 
                 int ch = getch();
                 if(ch==' '){
