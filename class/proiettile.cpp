@@ -1,4 +1,4 @@
-   #include "proiettile.hpp"
+ #include "proiettile.hpp"
    
     Proiettile::Proiettile(int startX, int startY) : x(startX), y(startY) {}
 
@@ -64,7 +64,7 @@ p_pro tail_delete(p_pro list, Map *map) {
     p_pro currentNode = list;
 
     while (currentNode != NULL) {
-        if (currentNode->pro->x >= 80 || map->isPlatform(currentNode->pro->x+1,currentNode->pro->y)) {
+        if (currentNode->pro->x >= 80 || currentNode->pro->x<=2 || map->isPlatform(currentNode->pro->x+1,currentNode->pro->y) || currentNode->pro->colpito) {
             p_pro nextNode = currentNode->next;
             delete currentNode->pro;
             delete currentNode;
@@ -81,3 +81,6 @@ p_pro tail_delete(p_pro list, Map *map) {
             currentNode = currentNode->next;
         }
     }
+
+    return list;
+}
