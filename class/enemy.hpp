@@ -1,6 +1,6 @@
 #ifndef ENEMY_H
 #define ENEMY_H
-#include "map.hpp"
+#include "map/map.hpp"
 #include "proiettile.hpp"
 class Nemico
 {

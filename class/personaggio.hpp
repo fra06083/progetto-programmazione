@@ -3,7 +3,7 @@
 #define MAX_Y 24
 #define MAX_X 80
 #include <ncurses.h>
-#include "map.hpp"
+#include "map/map.hpp"
 #include "enemy.hpp"
 #include "proiettile.hpp"
 class Player
