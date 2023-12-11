@@ -2,7 +2,7 @@
 #define PROIETTILE_H
 #include <iostream>
 #include <ncurses.h>
-#include "map.hpp"
+#include "map/map.hpp"
 
  struct lista_proiettili;
 class Proiettile {

@@ -2,7 +2,7 @@
 #include "class/enemy.hpp"
 #include "class/proiettile.hpp"
 #include "class/personaggio.hpp"
-#include "class/map.hpp"
+#include "class/map/map.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
