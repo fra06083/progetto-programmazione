@@ -70,11 +70,3 @@ int Layout::main_menu()
     }
         return 0;
 }
-/* void Layout::draw_player(int x, int y){
-        mvwprintw(game, y, x,"@");  // Testa
-        mvwprintw(game, y +1, x, "|"); // Corpo
-        mvwprintw(game, y +1, x - 1, "/");  // Braccio sinistro
-        mvwprintw(game, y +1, x + 1, "\\");  // Braccio destro
-        mvwprintw(game, y+2, x -1, "/");  // Gamba sinistra
-        mvwprintw(game, y+2, x + 1, "\\");  // Gamba destra
-    } */
