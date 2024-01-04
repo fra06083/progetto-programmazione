@@ -1,5 +1,6 @@
 #include "layout.hpp"
 #include <cstring>
+
 void Layout::init_screen()
 {
     initscr();

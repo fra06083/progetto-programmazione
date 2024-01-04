@@ -1,5 +1,6 @@
 #include "map.hpp"
 
+
 /* Tutto ciò che è una piattaforma viene segnato da una matrice bool map[j][i] = true
    in modo che sia poi riconosciuto dalla funzione is platform e lo traduca in "=" */
 
@@ -8,7 +9,6 @@ Map::Map(){
 }
 
 void Map::generateMap(){  
-
     for (int i = 0; i < MAX_X; i++)  // Creazione del terreno
     {
         for (int j = 0; j < MAX_Y; j++)

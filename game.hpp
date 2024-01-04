@@ -3,6 +3,7 @@
 #include "class/proiettile.hpp"
 #include "class/personaggio.hpp"
 #include "class/map/map.hpp"
+#include "class/map/room.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -15,6 +16,7 @@ private:
   Layout *layout;
   Player *player;
   Map *map;
+  room *rooms;
   p_en enemy;
   p_pro proiettile;
   bool quit = false;

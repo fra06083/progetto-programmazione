@@ -1,5 +1,7 @@
 
-//comando compilazione: g++ main.cpp class/layout.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp  class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o test
+/*comando compilazione: 
+g++ main.cpp class/layout.cpp class/map/room.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o test */
+ 
 // #include "class/personaggio.hpp"
 // #include "class/map/map.hpp"
 #include "game.hpp"
