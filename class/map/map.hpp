@@ -3,9 +3,8 @@
 #define MAX_Y 24
 #define MAX_X 80
 #include "platform.hpp"
-#include <ctime>
 #include <cstdlib>
-#include <ncurses.h>
+
 
 
 class Map

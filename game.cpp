@@ -207,27 +207,40 @@ void Game::run()
                     // Aggiorna la fase di salto del giocatore
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
+
                 // cout temporaneo per guardare i contatori
                 cout<<"\n\ncurrent:"<<rooms->current_room<<" last:"<<rooms->last_room<<"-";
+
+                // Caso in cui siamo già nell'ultima stanza generata
                 if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room){
-                        layout->init_screen();
-                        rooms->generate_new_room(rooms->last_room);    
-                        player->init();
-                        clear();
-                        for (int i = 0; i < MAX_X; i++)
-                        {
-                            for (int j = 0; j < MAX_Y; j++)
-                            {
-                                if (map->isPlatform(i, j))
-                                {
-                                    move(j, i);
-                                    mvwprintw(layout->game, j, i, "=");
-                                }
-                            }
-                        }
-                        layout->draw_box();
-                        player->draw(layout->game);
-                        wrefresh(layout->game);       
+                    //Genera e salva nuove mappe
+                    map=rooms->generate_new_room(); 
+
+                    //Riporta la x all'inizio alla generazione della nuova mappa
+                    player->x=2; 
+
+                    //controlla non ci siano piattaforme e sposta il player di conseguenza
+                    if (map->isPlatform(player->y, player->x)){
+                        player->y--;
+                    }         
+                }
+
+                //Caso in cui vogliamo tornare indietro
+                if (player->x==1 && rooms->current_room != 1){
+                    map=rooms->load_room(rooms->current_room-1);
+                    player->x=MAX_X-2;
+                    if (map->isPlatform(player->y, player->x)){
+                        player->y--;
+                    }
+                }
+
+                //Caso in cui si va avanti ma non siamo nell'ultima stanza
+                if (player->x==MAX_X-1 && rooms->current_room != rooms->last_room){
+                    map=rooms->load_room(rooms->current_room+1);
+                    player->x=2;
+                    if (map->isPlatform(player->y, player->x)){
+                        player->y--;
+                    }
                 }
             }
         }
