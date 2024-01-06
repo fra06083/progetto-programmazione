@@ -1,4 +1,5 @@
 #include "map.hpp"
+#include <ctime>
 
 
 /* Tutto ciò che è una piattaforma viene segnato da una matrice bool map[j][i] = true

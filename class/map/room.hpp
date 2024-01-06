@@ -13,9 +13,8 @@ public:
     room(Map *first_map, int initial_room=1);
 
     void cleanup_maps();
-    void generate_new_room(int last_room);
-    static void save_room(Map room_layout, int room_number);
-    static void load_room(int room_number);
+    Map* generate_new_room();
+    Map* load_room(int room_number);
     int get_current_room ();
     int get_last_room();
 };
