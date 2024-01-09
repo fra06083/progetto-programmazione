@@ -17,6 +17,7 @@ private:
   Player *player;
   Map *map;
   room *rooms;
+  platform* temp;
   p_en enemy;
   p_pro proiettile;
   bool quit = false;
@@ -26,7 +27,7 @@ public:
   Game(Layout *l, Map *m, Player *p, p_en en, p_pro pr);
   int updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i);
   void run();
-
+  void drawMap (Layout *game_window, Map *game_map);
 };
 
 

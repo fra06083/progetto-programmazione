@@ -25,7 +25,8 @@ void room::cleanup_maps() {
         this->last_room = this->current_room;
 
         Map* new_map = new Map;
-        new_map->generateMap();
+        if (this->current_room%5==0) new_map->generateShop();
+        else new_map->generateMap();
 
         // Espande l'array dinamico di mappe
         Map** new_maps = new Map*[this->current_room];

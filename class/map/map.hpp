@@ -13,11 +13,13 @@ private:
     
 public:
     platform *platf[54];
+    platform *shop_layout[50];
     // valori max y e max x
     bool map[MAX_Y][MAX_X];
     Map();
 
     void generateMap();
+    void generateShop();
 
     bool isPlatform(int x, int y);
     bool platformAbove(int x, int y);

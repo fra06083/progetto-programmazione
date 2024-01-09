@@ -30,7 +30,28 @@ int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
     return i;
     }
 
-   
+void Game::drawMap (Layout *game_window, Map *game_map){
+    for (int i = 0; i < MAX_X; i++){   
+        for (int j = 0; j < MAX_Y; j++){
+            if (map->isPlatform(i, j)){
+
+                move(j, i);
+                mvwprintw(layout->game, j, i, "=");
+                int tempI=i, tempJ=j;
+
+                //Disegna le box (| ? |) sulle piattaforme designate
+                for(int v=1; map->isPlatform(tempI++, tempJ); v++){
+                    if(v==5){
+                        tempI=tempI-v;
+                        tempJ++;
+                        for(int k=0; map->isPlatform(tempI++, tempJ); k++){
+                            if(k>=5 && tempJ != MAX_Y-1){
+                                mvwprintw(layout->game, j-2, i+1, "___");
+                                mvwprintw(layout->game, j-1, i,  "| ? |");
+                            }}
+                    }}
+            }}
+    }}
 
 void Game::run()
 {
@@ -68,17 +89,7 @@ void Game::run()
                 clear();
 
                 // Disegna la mappa
-                for (int i = 0; i < MAX_X; i++)
-                {
-                    for (int j = 0; j < MAX_Y; j++)
-                    {
-                        if (map->isPlatform(i, j))
-                        {
-                            move(j, i);
-                            mvwprintw(layout->game, j, i, "=");
-                        }
-                    }
-                }
+                drawMap(layout, map);
 
                 // Disegna il bordo del gioco
                 layout->draw_box();
@@ -87,7 +98,7 @@ void Game::run()
                 player->draw(layout->game);
 
                 // Aggiungi un nemico ogni 100 iterazioni
-                if (counter_nemici == 100)
+                if (counter_nemici >= 100 && rooms->current_room%5!=0)
                 {
                     int en_X = std::rand() % 79;
                     int en_Y = std::rand() % 23;
@@ -222,7 +233,8 @@ void Game::run()
                     //controlla non ci siano piattaforme e sposta il player di conseguenza
                     if (map->isPlatform(player->y, player->x)){
                         player->y--;
-                    }         
+                    }
+    
                 }
 
                 //Caso in cui vogliamo tornare indietro

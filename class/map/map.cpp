@@ -1,4 +1,5 @@
 #include "map.hpp"
+#include <ncurses.h>
 #include <ctime>
 
 
@@ -6,7 +7,7 @@
    in modo che sia poi riconosciuto dalla funzione is platform e lo traduca in "=" */
 
 Map::Map(){
-    generateMap();
+    
 }
 
 void Map::generateMap(){  
@@ -124,6 +125,11 @@ void Map::generateMap(){
         break;
         }
     
+}
+
+void Map::generateShop(){
+    platform::shops_type(rand()%5+1, shop_layout);
+    Map::make_readable(shop_layout);
 }
 
 // Funzione usata per vedere se è presente una piattaforma in una data posizione

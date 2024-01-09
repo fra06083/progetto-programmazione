@@ -15,6 +15,7 @@ class platform {
     int platW ();
 
     static void platformType (platform *platf[], int randPlatType);
+    static void shops_type (int rand_shop, platform* shop_layout[]);
 };
 
 #endif
