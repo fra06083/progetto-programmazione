@@ -22,7 +22,8 @@ void Player::init()
             }
         }
     }
-    x = 2;
+    x = 1;
+    x=2;
     y = MAX_Y-2; //- bodyHeight; // Posiziona il baricentro dello stickman sotto le gambe, sopra la piattaforma più bassa trovata
 }
 void Player::p_move(WINDOW *game, char m = 'r')
@@ -43,5 +44,4 @@ void Player::p_move(WINDOW *game, char m = 'r')
         draw(game); // Disegno del personaggio nella nuova posizione
      
     }
-
 }

@@ -1,4 +1,4 @@
- #include "proiettile.hpp"
+   #include "proiettile.hpp"
    
     Proiettile::Proiettile(int startX, int startY) : x(startX), y(startY) {}
 
