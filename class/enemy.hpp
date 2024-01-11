@@ -2,29 +2,47 @@
 #define ENEMY_H
 #include "map/map.hpp"
 #include "proiettile.hpp"
-class Nemico
+#include "personaggio.hpp"
+#include <ncurses.h>
+#include <iostream>
+#include <ctime>
+
+class Base_en;
+
+struct lista_base_enemy{
+    Base_en* b_en;
+    lista_base_enemy* next;
+};
+typedef lista_base_enemy* p_base_en;
+p_base_en e_head_insert(p_base_en& list,Base_en* enemy);
+p_base_en e_tail_delete(p_base_en list, Map *map, p_pro p, Player* player);
+
+
+class Base_en
 {
 protected:
     
 public:
+    
     int x_;
-    int y_; 
-    Nemico(int x, int y);
-    int counter_move=0;
-    bool dead =false;
+    int y_;
+    
+    
+    Base_en(int x, int y, char type);
+    int health;
+    int counter_move;
+    bool dead;
+    int gold;
+    int speed;
+    char simbolo;
     void draw(WINDOW *win);
     void cancella(WINDOW *win);
-    void move(WINDOW *game, Map *map, int playerX, int playerY);
-    void death(WINDOW* game, Map *map, p_pro proiettile);
-
-
+    
+    void move(WINDOW* game,Map *map, char c);
+    
+    
 };
-struct lista_enemy{
-    Nemico* enemy;
-    lista_enemy* next;
- };
-typedef lista_enemy* p_en;
-p_en e_head_insert(p_en& list,Nemico* enemy);
-p_en e_tail_delete(p_en list,  Map *map, p_pro proiettile);
+
+
 
 #endif

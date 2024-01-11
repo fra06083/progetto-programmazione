@@ -1,32 +1,65 @@
-#include <ncurses.h>
-#include <iostream>
-#include <ctime>
 #include "enemy.hpp"
 
-    Nemico::Nemico(int x, int y) : x_(x), y_(y) {}
+    Base_en::Base_en(int x, int y, char type){
+        x_=x;
+        y_=y;
+        if(type=='b'){
+            health=3;
+            counter_move=0;
+            gold=3;
+            dead =false;
+            speed=2;
+            simbolo='X';
+ 
+        }
+        if(type=='m'){
+            health=5;
+            counter_move=0;
+            gold=5;
+            dead =false;
+            speed=2;
+            simbolo='Y';
+        }
+        if(type=='t'){
+            health=7;
+            counter_move=0;
+            gold=10;
+            dead =false;
+            speed=3;
+            simbolo='Z';
+        }
+    }
 
-    void Nemico::draw(WINDOW *win)
-    { if(!dead){
+    void Base_en::draw(WINDOW *win)
+    { 
+        if(!dead){
+        if(simbolo=='X'){
         mvwprintw(win, y_, x_, "X");
+        }
+        if(simbolo=='Y'){
+        mvwprintw(win, y_, x_, "Y");
+        }
+        if(simbolo=='Z'){
+        mvwprintw(win, y_, x_, "Z");
+        }
+      
     }
     }
-    void Nemico::cancella(WINDOW *win)
-    {
-        mvwprintw(win, y_, x_, " ");
-    }
-    void Nemico::move(WINDOW* game,Map *map, int playerX, int playerY)
+
+  
+    void Base_en::move(WINDOW* game,Map *map, char c)
     { 
         if(!dead){
         // Calcola la direzione verso il giocatore
-        int deltaX = playerX - x_;
-        int deltaY = playerY - y_;
-        if(counter_move==4){
+        //int deltaX = playerX - x_;
+        //int deltaY = playerY - y_;
+        if(counter_move==speed){
         // Sposta il nemico verso il giocatore
-        if (deltaX > 0)
+        if (c=='r')
         {
             x_++;
         }
-        else if (deltaX < 0)
+        else if (c=='l')
         {
             x_--;
             
@@ -34,16 +67,7 @@
         counter_move=0;
         }
         counter_move=counter_move+1;
-        /*
-        if (deltaY > 0)
-        {
-            y_++;
-        }
-        else if (deltaY < 0)
-        {
-            y_--;
-        }
-        */
+        
         //while (!map->platformUnder(x_, y_)){
         if(!map->platformUnder(x_, y_)){ 
             mvwaddch(game, y_, x_, ' '); // Cancellazione personaggio corrente
@@ -52,15 +76,17 @@
             draw(game);
         }
   }
+
 }
 
 
+
 // Funzione per l'inserimento di un nemico all'inizio della lista
-p_en e_head_insert(p_en& list, Nemico *enemy1){
+p_base_en e_head_insert(p_base_en& list, Base_en *enemy1){
     // Crea un nuovo nodo
-    p_en tmp = new lista_enemy;
+    p_base_en tmp = new lista_base_enemy;
     // Assegna il nemico al nuovo nodo
-    tmp->enemy = enemy1;
+    tmp->b_en= enemy1;
     // Collega il nuovo nodo alla lista
     tmp->next = list;
     // Aggiorna la testa della lista
@@ -70,11 +96,11 @@ p_en e_head_insert(p_en& list, Nemico *enemy1){
 }
 
 // Funzione per la rimozione di nemici colpiti dalla lista
-p_en e_tail_delete(p_en list, Map *map, p_pro p) {
+p_base_en e_tail_delete(p_base_en list, Map *map, p_pro p, Player* player) {
     // Nodo precedente nella lista
-    p_en prevNode = NULL;
+    p_base_en prevNode = NULL;
     // Nodo corrente nella lista
-    p_en currentNode = list;
+    p_base_en currentNode = list;
     // Proiettile corrente
     p_pro colpito = p;
 
@@ -83,21 +109,23 @@ p_en e_tail_delete(p_en list, Map *map, p_pro p) {
         // Itera attraverso i nemici nella lista
         while (currentNode != NULL) {
             // Verifica se il proiettile ha colpito il nemico
-            if (colpito->pro && currentNode->enemy && 
-                (colpito->pro->x + 1 == currentNode->enemy->x_ || 
-                 colpito->pro->x - 1 == currentNode->enemy->x_ || 
-                 colpito->pro->x == currentNode->enemy->x_) && 
-                colpito->pro->y == currentNode->enemy->y_) {
-                // Segna il nemico come morto
-                currentNode->enemy->dead = true;
+            if (colpito->pro && currentNode->b_en && 
+                (colpito->pro->x + 2 == currentNode->b_en->x_ || 
+                 colpito->pro->x - 2 == currentNode->b_en->x_ || 
+                 colpito->pro->x + 1 == currentNode->b_en->x_ || 
+                 colpito->pro->x - 1 == currentNode->b_en->x_ ||
+                 colpito->pro->x == currentNode->b_en->x_) && 
+                colpito->pro->y == currentNode->b_en->y_) {
+                if(currentNode->b_en->health<=0){// Segna il nemico come morto
+                currentNode->b_en->dead = true;
                 // Segna il proiettile come colpito
                 colpito->pro->colpito = true;
 
                 // Salva il puntatore al prossimo nodo
-                p_en nextNode = currentNode->next;
+                p_base_en nextNode = currentNode->next;
 
                 // Elimina il nemico corrente dalla lista
-                delete currentNode->enemy;
+                delete currentNode->b_en;
                 delete currentNode;
 
                 // Aggiorna i collegamenti nella lista
@@ -109,6 +137,13 @@ p_en e_tail_delete(p_en list, Map *map, p_pro p) {
 
                 // Sposta il puntatore al prossimo nodo
                 currentNode = nextNode;
+                } 
+                else{
+                    colpito->pro->colpito = true;
+                    currentNode->b_en->health=currentNode->b_en->health - player->damage;
+                    prevNode = currentNode;
+                    currentNode = currentNode->next;
+                }
             } else {
                 // Se il nemico non è stato colpito, passa al nodo successivo
                 prevNode = currentNode;
@@ -126,3 +161,4 @@ p_en e_tail_delete(p_en list, Map *map, p_pro p) {
     // Restituisci la lista aggiornata
     return list;
 }
+
