@@ -132,6 +132,23 @@ void Map::generateShop(){
     Map::make_readable(shop_layout);
 }
 
+void Map::generateFirstMap(){
+    for (int i = 0; i < MAX_X; i++)  // Creazione del terreno
+    {
+        for (int j = 0; j < MAX_Y; j++)
+        {
+            if (j == MAX_Y - 1)
+            {
+                map[j][i] = true;
+            }
+            else
+            {
+                map[j][i] = false;
+            }
+        }
+    }
+}
+
 // Funzione usata per vedere se è presente una piattaforma in una data posizione
 bool Map::isPlatform(int x, int y){  
     if (x < 0 || x >= MAX_X || y < 0 || y >= MAX_Y)

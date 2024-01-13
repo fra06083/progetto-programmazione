@@ -26,6 +26,7 @@ private:
   p_pro proiettile;
   bool quit = false;
   int counter=0;
+  int random_number=rand();
 
 public:
   Game(Layout *l, Map *m, Player *p, p_base_en b_en, p_pro pr);

@@ -28,62 +28,65 @@ int Game::updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i){
         i=0;
     }
     return i;
-    }
+}
+
 p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Player *player, p_pro proiettile){
 // Aggiorna la posizione e disegna i nemici vivi
-                if (base_en != NULL)
-                {
-                    p_base_en count = base_en;
-                    p_base_en prev = NULL;
+    if (base_en != nullptr)
+    {
+        p_base_en count = base_en;
+        p_base_en prev = nullptr;
 
-                    while (count != NULL)
-                    {
-                        if (!count->b_en->dead)
-                        { 
+        while (count != nullptr)
+        {
+            if (!count->b_en->dead)
+            { 
                     
-                            int deltaX = player->x - count->b_en->x_;
-                            if(deltaX>0 && !Base_isPositionOccupied(count->b_en->x_ + 1,count->b_en->y_, base_en)){
-                            count->b_en->move(game, map, 'r');
-                            }
-                            if(deltaX<0 && !Base_isPositionOccupied(count->b_en->x_ - 1,count->b_en->y_, base_en)){
-                            count->b_en->move(game, map, 'l');
-                            }
-
-
-                            count->b_en->draw(game);                            
-                            prev = count;
-                            count = count->next;
-                        }
-                        else
-                        {
-                            // Rimuovi il nemico morto dalla lista
-                            if (prev != NULL)
-                            {
-                                prev->next = count->next;
-                                delete count->b_en;
-                                delete count;
-                                count = prev->next;
-                            }
-                            else
-                            {
-                                base_en = count->next;
-                                delete count->b_en;
-                                delete count;
-                                count = base_en;
-                            }
-                        }
-                    }
-
-                    // Rimuovi i nemici morti
-                    base_en = e_tail_delete(base_en, map, proiettile, player);
+                int deltaX = player->x - count->b_en->x_;
+                if(deltaX>0 && !Base_isPositionOccupied(count->b_en->x_ + 1,count->b_en->y_, base_en)){
+                    count->b_en->move(game, map, 'r');
                 }
-                return base_en;
+                if(deltaX<0 && !Base_isPositionOccupied(count->b_en->x_ - 1,count->b_en->y_, base_en)){
+                    count->b_en->move(game, map, 'l');
+                }
+
+
+                count->b_en->draw(game);                            
+                prev = count;
+                count = count->next;
+            }
+            else
+            {
+                // Rimuovi il nemico morto dalla lista
+                if (prev != nullptr)
+                {
+                    prev->next = count->next;
+                    delete count->b_en;
+                    delete count;
+                    count = prev->next;
+                }
+                else
+                {
+                    base_en = count->next;
+                    delete count->b_en;
+                    delete count;
+                    count = base_en;
+                }
+            }
+        }
+
+        // Rimuovi i nemici morti
+        base_en = e_tail_delete(base_en, map, proiettile, player);
+    }
+    return base_en;
 }
 
 void Game::drawMap (Layout *game_window, Map *game_map){
     for (int i = 0; i < MAX_X; i++){   
         for (int j = 0; j < MAX_Y; j++){
             if (map->isPlatform(i, j)){
+
+                srand(random_number+rooms->current_room+i+j);
 
                 move(j, i);
                 mvwprintw(layout->game, j, i, "=");
@@ -97,7 +100,35 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                         for(int k=0; map->isPlatform(tempI++, tempJ); k++){
                             if(k>=5 && tempJ != MAX_Y-1){
                                 mvwprintw(layout->game, j-2, i+1, "___");
-                                mvwprintw(layout->game, j-1, i,  "| ? |");
+                                switch(rand()%9+1){
+                                    case 1:
+                                    mvwprintw(layout->game, j-1, i,  "| H |");
+                                    break;
+                                    case 2:
+                                    mvwprintw(layout->game, j-1, i,  "| J |");
+                                    break;
+                                    case 3:
+                                    mvwprintw(layout->game, j-1, i,  "| ! |");
+                                    break;
+                                    case 4:
+                                    mvwprintw(layout->game, j-1, i,  "|! !|");
+                                    break;
+                                    case 5:
+                                    mvwprintw(layout->game, j-1, i,  "|!!!|");
+                                    break;
+                                    case 6:
+                                    mvwprintw(layout->game, j-1, i,  "| + |");
+                                    break;
+                                    case 7:
+                                    mvwprintw(layout->game, j-1, i,  "|+ +|");
+                                    break;
+                                    case 8:
+                                    mvwprintw(layout->game, j-1, i,  "|+++|");
+                                    break;
+                                    case 9:
+                                    mvwprintw(layout->game, j-1, i,  "| # |");
+                                    break;
+                                } 
                             }}
                     }}
             }}
@@ -119,7 +150,7 @@ void Game::run()
         if (scelta == 1)
         {
             // Genera la mappa di gioco
-            map->generateMap();
+            map->generateFirstMap();
             rooms=new room(map);
             // Inizializza il giocatore
             player->init();
@@ -137,19 +168,10 @@ void Game::run()
                 halfdelay(1);
 
                 clear();
-                drawMap(layout, map);
+                
                 // Disegna la mappa
-                for (int i = 0; i < MAX_X; i++)
-                {
-                    for (int j = 0; j < MAX_Y; j++)
-                    {
-                        if (map->isPlatform(i, j))
-                        {
-                            move(j, i);
-                            mvwprintw(layout->game, j, i, "=");
-                        }
-                    }
-                }
+                drawMap(layout, map);
+                srand(time(NULL));
 
                 // Disegna il bordo del gioco
                 layout->draw_box();
@@ -157,39 +179,14 @@ void Game::run()
                 // Disegna il giocatore
                 player->draw(layout->game);
 
-                // Aggiungi un nemico ogni 100 iterazioni
-                if (counter_nemici == 100 && rooms->current_room%5!=0)
-                {   int n= std::rand() % 3;
-                    
-                    char simbolo;
-                    if(n==0){
-                        simbolo='b';
-                    
-                    }
-                    if(n==1){
-                        simbolo='m';
-
-                    }
-                    if(n==2){
-                        simbolo='t';
-
-                    }
-                    int en_X = std::rand() % 79;
-                    int en_Y = std::rand() % 23;
-                    
-                    Base_en *en = new Base_en(en_X, en_Y,simbolo);
-                
-                    base_en = e_head_insert(base_en, en);
+                // Disegna e aggiorna i nemici
+                if (base_en != nullptr && rooms->current_room%5!=0)
+                {   
                     base_en->b_en->draw(layout->game);
-                
-                    counter_nemici = 0;
-                }
+                    base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
+                } 
+                rooms->room_enemy[rooms->current_room]=base_en;
 
-                counter_nemici = counter_nemici + 1;
-                std::cerr << counter_nemici;
-            
-                base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
-               
                 // Aggiorna lo schermo
                 wrefresh(layout->game);
 
@@ -258,8 +255,6 @@ void Game::run()
                     // Aggiorna la fase di salto del giocatore
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
-                 // cout temporaneo per guardare i contatori
-                cout<<"\n\ncurrent:"<<rooms->current_room<<" last:"<<rooms->last_room<<"-";
 
                 // Caso in cui siamo già nell'ultima stanza generata
                 if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room){
@@ -273,15 +268,17 @@ void Game::run()
                     if (map->isPlatform(player->y, player->x)){
                         player->y--;
                     }         
+                    base_en=rooms->get_current_enemy();
                 }
 
                 //Caso in cui vogliamo tornare indietro
-                if (player->x==1 && rooms->current_room != 1){
+                if (player->x==1 && rooms->current_room != 0){
                     map=rooms->load_room(rooms->current_room-1);
                     player->x=MAX_X-2;
                     if (map->isPlatform(player->y, player->x)){
                         player->y--;
                     }
+                    base_en=rooms->get_current_enemy();
                 }
 
                 //Caso in cui si va avanti ma non siamo nell'ultima stanza
@@ -291,6 +288,7 @@ void Game::run()
                     if (map->isPlatform(player->y, player->x)){
                         player->y--;
                     }
+                    base_en=rooms->get_current_enemy();
                 }
             }
         }

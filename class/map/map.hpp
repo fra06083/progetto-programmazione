@@ -20,6 +20,7 @@ public:
 
     void generateMap();
     void generateShop();
+    void generateFirstMap();
 
     bool isPlatform(int x, int y);
     bool platformAbove(int x, int y);
