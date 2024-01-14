@@ -20,9 +20,9 @@ private:
   Layout *layout;
   Player *player;
   Map *map;
+  Map* next_map = new Map;
   room *rooms;
   p_base_en base_en;
-  
   p_pro proiettile;
   bool quit = false;
   int counter=0;

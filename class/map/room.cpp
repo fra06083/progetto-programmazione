@@ -73,7 +73,7 @@ void room::cleanup_maps() {
             new_enemys[i] = this->room_enemy[i];
         }
         
-        if(base_en_counter<3){
+        if(base_en_counter<3 && medium_en_counter<3){
             base_en_counter++;
         }
 

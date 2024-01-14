@@ -167,8 +167,8 @@ void Game::run()
                 // Imposta la modalità di attesa per l'input
                 halfdelay(1);
 
-                clear();
-                
+                erase();
+
                 // Disegna la mappa
                 drawMap(layout, map);
                 srand(time(NULL));
@@ -176,16 +176,20 @@ void Game::run()
                 // Disegna il bordo del gioco
                 layout->draw_box();
 
-                // Disegna il giocatore
-                player->draw(layout->game);
-
                 // Disegna e aggiorna i nemici
                 if (base_en != nullptr && rooms->current_room%5!=0)
                 {   
                     base_en->b_en->draw(layout->game);
+                    werase(layout->game);
+                    drawMap(layout, map);
+                    srand(time(NULL));
+                    layout->draw_box();
                     base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
                 } 
                 rooms->room_enemy[rooms->current_room]=base_en;
+
+                // Disegna il giocatore
+                player->draw(layout->game);
 
                 // Aggiorna lo schermo
                 wrefresh(layout->game);
@@ -255,9 +259,13 @@ void Game::run()
                     // Aggiorna la fase di salto del giocatore
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
+                
+                wrefresh(layout->game);
+                
 
                 // Caso in cui siamo già nell'ultima stanza generata
-                if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room){
+                if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room && rooms->current_room != 2){
+                    
                     //Genera e salva nuove mappe
                     map=rooms->generate_new_room(); 
 
@@ -269,6 +277,11 @@ void Game::run()
                         player->y--;
                     }         
                     base_en=rooms->get_current_enemy();
+                }
+
+                if (rooms->current_room == 2 && rooms->current_room == rooms->last_room){
+                    next_map=rooms->generate_new_room();
+                    rooms->current_room--;
                 }
 
                 //Caso in cui vogliamo tornare indietro
