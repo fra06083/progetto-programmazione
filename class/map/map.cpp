@@ -128,6 +128,7 @@ void Map::generateMap(){
 }
 
 void Map::generateShop(){
+    shop_used=false;
     platform::shops_type(rand()%5+1, shop_layout);
     Map::make_readable(shop_layout);
 }
