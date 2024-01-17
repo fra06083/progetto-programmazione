@@ -1,7 +1,4 @@
 #include "class/layout.hpp"
-//#include "class/base_enemy.hpp"
-//#include "class/medium_enemy.hpp"
-//#include "class/tough_enemy.hpp"
 #include "class/collision.hpp"
 #include "class/proiettile.hpp"
 
@@ -37,8 +34,3 @@ public:
   void run();
   
 };
-
-
-
-
-
