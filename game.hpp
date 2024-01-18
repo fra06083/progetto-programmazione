@@ -1,14 +1,10 @@
 #include "class/layout.hpp"
-//#include "class/base_enemy.hpp"
-//#include "class/medium_enemy.hpp"
-//#include "class/tough_enemy.hpp"
 #include "class/collision.hpp"
 #include "class/proiettile.hpp"
 
 #include "class/personaggio.hpp"
 #include "class/map/map.hpp"
 #include "class/map/room.hpp"
-#include "class/objects.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -25,25 +21,16 @@ private:
   room *rooms;
   p_base_en base_en;
   p_pro proiettile;
-  objects* all_obj=new objects;
-  object* current_obj=new object;
   bool quit = false;
   int counter=0;
   int random_number=rand();
-  char R_shop_symbol[4];
-  char L_shop_symbol[4];
 
 public:
   Game(Layout *l, Map *m, Player *p, p_base_en b_en, p_pro pr);
   int updateJump(WINDOW* game, Player *p, Map *map, bool isJump, int i);
   p_base_en b_update_enemy( p_base_en base_en,WINDOW* game, Map *map, Player *player, p_pro proiettile);
-  void shop_control();
+ 
   void drawMap (Layout *game_window, Map *game_map);
   void run();
   
 };
-
-
-
-
-

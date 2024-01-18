@@ -1,4 +1,3 @@
-
 #include "game.hpp"
 Game::Game(Layout *l, Map *m, Player *p, p_base_en b_en, p_pro pr)
 {
@@ -40,16 +39,28 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
         while (count != nullptr)
         {
             if (!count->b_en->dead)
-            { 
-                    
+            {   if(count->b_en->timer==20){
+                count->b_en->sparareProiettile(player->x, player->y);
+                count->b_en->timer=0;
+            }
+                count->b_en->timer+= 1;
                 int deltaX = player->x - count->b_en->x_;
-                if(deltaX>0 && !Base_isPositionOccupied(count->b_en->x_ + 1,count->b_en->y_, base_en)){
+                if(deltaX>0){
                     count->b_en->move(game, map, 'r');
                 }
-                if(deltaX<0 && !Base_isPositionOccupied(count->b_en->x_ - 1,count->b_en->y_, base_en)){
+                if(deltaX<0 ){
                     count->b_en->move(game, map, 'l');
                 }
+                
+            p_pro proiettileNemico = count->b_en->proiettili;
+            while (proiettileNemico != NULL) {
+                if (proiettileNemico->pro != nullptr && proiettileNemico->pro->isAttivo()) {
+                    proiettileNemico->pro->move(layout->game, proiettileNemico, proiettileNemico->pro->dir);
+                }
+                proiettileNemico = proiettileNemico->next;
+            }
 
+            count->b_en->proiettili = pro_tail_delete(count->b_en->proiettili, map);
 
                 count->b_en->draw(game);                            
                 prev = count;
@@ -92,8 +103,7 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                 mvwprintw(layout->game, j, i, "=");
                 int tempI=i, tempJ=j;
 
-                //Disegna le box (| ? |) sulle piattaforme designate a meno che lo shop sia stato usato
-                if(rooms->normal_maps[rooms->current_room]->shop_used==false){
+                //Disegna le box (| ? |) sulle piattaforme designate
                 for(int v=1; map->isPlatform(tempI++, tempJ); v++){
                     if(v==5){
                         tempI=tempI-v;
@@ -132,45 +142,8 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                                 } 
                             }}
                     }}
-                }
             }}
     }}   
-
-void Game::shop_control(){
-    //Legge le 3 posizioni a destra e a sinistra del player e le salva in shop_symbol
-    mvwinnstr(layout->game, player->y, player->x+1, R_shop_symbol, 3);
-    mvwinnstr(layout->game, player->y, player->x-3, L_shop_symbol, 3);
-    
-    //Current_obj è uguale all'oggetto di cui riconosce i simboli ( H ,+ +...), nullptr altrimenti
-    current_obj=all_obj->get_current_object(R_shop_symbol);
-
-    //Imposta temporaneamente un timeout di 60s per rendere difficile mancare il getch
-    wtimeout(layout->game, 60000);
-
-    //Entra in questo if solo se ci trviamo davanti ad uno shop
-    if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
-            all_obj->buy_obj(*current_obj);
-            rooms->normal_maps[rooms->current_room]->shop_used=true;
-            drawMap(layout, map);
-            wrefresh(layout->game);
-        }
-    }
-
-    //Uguale al precedente ma dal lato sinistro
-    current_obj=all_obj->get_current_object(L_shop_symbol);
-    if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
-            all_obj->buy_obj(*current_obj);
-            rooms->normal_maps[rooms->current_room]->shop_used=true;
-            drawMap(layout, map);
-            wrefresh(layout->game);
-        }
-    }
-
-    //Elimina il timeout temporaneo
-    notimeout(layout->game, true);
-}
 
 void Game::run()
 {
@@ -231,9 +204,6 @@ void Game::run()
 
                 // Aggiorna lo schermo
                 wrefresh(layout->game);
-
-                //Gestore dello shop
-                shop_control();
 
                 // Gestisci i proiettili
                 if (proiettile != NULL)
@@ -301,7 +271,8 @@ void Game::run()
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
                 
-                shop_control();
+                wrefresh(layout->game);
+                
 
                 // Caso in cui siamo già nell'ultima stanza generata
                 if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room && rooms->current_room != 2){
