@@ -143,9 +143,10 @@ p_base_en e_tail_delete(p_base_en list, Map *map, p_pro p, Player* player) {
                 colpito->pro->y == currentNode->b_en->y_) {
                 if(currentNode->b_en->health<=0){// Segna il nemico come morto
                 currentNode->b_en->dead = true;
+                player->Valuta= player->Valuta +currentNode->b_en->gold;
                 // Segna il proiettile come colpito
                 colpito->pro->colpito = true;
-
+                
                 // Salva il puntatore al prossimo nodo
                 p_base_en nextNode = currentNode->next;
 
