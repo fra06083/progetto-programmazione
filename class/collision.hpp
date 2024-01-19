@@ -3,7 +3,7 @@
 
 #include "enemy.hpp"
 
-bool Base_isPositionOccupied(int x, int y, p_base_en base_en);
+bool Base_isPositionOccupied(WINDOW* game, int x, int y, int direction);
 
 
 #endif

@@ -45,10 +45,10 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             }
                 count->b_en->timer+= 1;
                 int deltaX = player->x - count->b_en->x_;
-                if(deltaX>0){
+                if(deltaX>0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'r');
                 }
-                if(deltaX<0 ){
+                if(deltaX<0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'l');
                 }
                 
@@ -104,6 +104,7 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                 int tempI=i, tempJ=j;
 
                 //Disegna le box (| ? |) sulle piattaforme designate
+                if(!map->shop_used){
                 for(int v=1; map->isPlatform(tempI++, tempJ); v++){
                     if(v==5){
                         tempI=tempI-v;
@@ -141,9 +142,45 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                                     break;
                                 } 
                             }}
-                    }}
+                    }}}
             }}
     }}   
+
+void Game::shop_control(){
+    //Legge le 3 posizioni a destra e a sinistra del player e le salva in shop_symbol
+    mvwinnstr(layout->game, player->y, player->x+1, R_shop_symbol, 3);
+    mvwinnstr(layout->game, player->y, player->x-3, L_shop_symbol, 3);
+
+    //Current_obj è uguale all'oggetto di cui riconosce i simboli ( H ,+ +...), nullptr altrimenti
+    current_obj=all_obj->get_current_object(R_shop_symbol);
+
+    //Imposta temporaneamente un timeout di 60s per rendere difficile mancare il getch
+    wtimeout(layout->game, 60000);
+
+    //Entra in questo if solo se ci trviamo davanti ad uno shop
+    if (current_obj!=nullptr){
+        if (wgetch(layout->game)=='\n'){
+            all_obj->buy_obj(*current_obj);
+            rooms->normal_maps[rooms->current_room]->shop_used=true;
+            drawMap(layout, map);
+            wrefresh(layout->game);
+        }
+    }
+
+    //Uguale al precedente ma dal lato sinistro
+    current_obj=all_obj->get_current_object(L_shop_symbol);
+    if (current_obj!=nullptr){
+        if (wgetch(layout->game)=='\n'){
+            all_obj->buy_obj(*current_obj);
+            rooms->normal_maps[rooms->current_room]->shop_used=true;
+            drawMap(layout, map);
+            wrefresh(layout->game);
+        }
+    }
+
+    //Elimina il timeout temporaneo
+    notimeout(layout->game, true);
+}
 
 void Game::run()
 {
@@ -201,6 +238,8 @@ void Game::run()
 
                 // Disegna il giocatore
                 player->draw(layout->game);
+
+                shop_control();
 
                 // Aggiorna lo schermo
                 wrefresh(layout->game);
@@ -271,6 +310,7 @@ void Game::run()
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
                 
+                shop_control();
                 wrefresh(layout->game);
                 
 
