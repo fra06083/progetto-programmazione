@@ -3,9 +3,11 @@
     Base_en::Base_en(int x, int y, char type){
         x_=x;
         y_=y;
+        
         if(type=='b'){
             health=3;
             counter_move=0;
+            damage=2;
             gold=3;
             dead =false;
             speed=2;
@@ -15,6 +17,7 @@
         if(type=='m'){
             health=5;
             counter_move=0;
+            damage=4;
             gold=5;
             dead =false;
             speed=2;
@@ -23,6 +26,7 @@
         if(type=='t'){
             health=7;
             counter_move=0;
+            damage=6;
             gold=10;
             dead =false;
             speed=3;
@@ -46,7 +50,7 @@
     }
     }
     void Base_en::sparareProiettile( int playerX, int playerY) {
-    if (!dead) {
+    if (!dead && simbolo!='X') {
         // Calcola la direzione in base alla posizione del player
         char direzione;
         if (playerX > x_) {
@@ -70,6 +74,7 @@
     void Base_en::move(WINDOW* game,Map *map, char c)
     { 
         if(!dead){
+            if(simbolo!='Y'){
         // Calcola la direzione verso il giocatore
         //int deltaX = playerX - x_;
         //int deltaY = playerY - y_;
@@ -87,7 +92,7 @@
         counter_move=0;
         }
         counter_move=counter_move+1;
-        
+        }
         //while (!map->platformUnder(x_, y_)){
         if(!map->platformUnder(x_, y_)){ 
             mvwaddch(game, y_, x_, ' '); // Cancellazione personaggio corrente

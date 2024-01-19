@@ -38,10 +38,10 @@ public:
     int speed;
     char simbolo;
     int timer=3;
-    int damage=1;
+    int damage;
     void draw(WINDOW *win);
     void cancella(WINDOW *win);
-    p_pro proiettili;
+    p_pro proiettili=NULL;
     void move(WINDOW* game,Map *map, char c);
     void sparareProiettile( int playerX, int playerY);
     

@@ -16,7 +16,6 @@ public:
     platform *shop_layout[50];
     // valori max y e max x
     bool map[MAX_Y][MAX_X];
-    bool shop_used=false;
     Map();
 
     void generateMap();
