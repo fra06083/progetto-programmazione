@@ -8,13 +8,24 @@ void Layout::init_screen()
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, height, width);
     game = subwin(stdscr, gheight + 3, gwidth + 1, START_Y, START_X);
+    info = subwin(stdscr, gheight +3, gwidth+5, 2, gwidth+5);
     getmaxyx(game, gx, gy);
 }
 void Layout::draw_box()
 {
     box(stdscr, 0, 0);
     box(game, 0, 0);
+    box(info, 0, 0);
     refresh();
+}
+void Layout::write_information(int health, int damage, int shield){
+    mvwprintw(info, 1, 1, " ___  ___  ___  ___  ___ ");
+    mvwprintw(info, 2, 1, "/ __>|_ _|| . ||_ _|/ __>");
+    mvwprintw(info, 3, 1, "\\__ \\ | | |   | | | \\__ \\");
+    mvwprintw(info, 4, 1, "<___/ |_| |_|_| |_| <___/");
+    mvwprintw(info, 6, 1, "VITA: RIMANENTE+SCUDO/%i", health);
+    mvwprintw(info, 7, 1, "DANNO: %i", damage);
+    wrefresh(info);
 }
 void Layout::clearwin()
 {

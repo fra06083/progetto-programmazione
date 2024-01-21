@@ -12,13 +12,13 @@ public:
     Map *map;
     int x, y, jump_max;
     int gravity;
-    int Valuta;
+    int Valuta, health;
     int damage=1;
     bool isJumping, fall, isAlive;
      
     
 
-    Player(int startX, int startY, int jump_max,Map *m);
+    Player(int startX, int startY, int jump_max,Map *m, int health);
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);

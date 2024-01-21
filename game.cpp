@@ -232,6 +232,7 @@ void Game::run()
                     drawMap(layout, map);
                     srand(time(NULL));
                     layout->draw_box();
+                    layout->write_information(player->health, player->damage, 100); // sostituito con player->health
                     base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
                 } 
                 rooms->room_enemy[rooms->current_room]=base_en;
