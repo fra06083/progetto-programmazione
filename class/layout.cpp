@@ -18,6 +18,16 @@ void Layout::draw_box()
     box(info, 0, 0);
     refresh();
 }
+void Layout::game_over(){
+    mvwprintw(stdscr, (height / 2) - 4, width / 2 - strlen("  ___   _   __  __ ___    _____   _____ ___ ") / 2, "   ___   _   __  __ ___    _____   _____ ___ ");
+    mvwprintw(stdscr, (height / 2)  - 4 + 1, width / 2 - strlen("  ___   _   __  __ ___    _____   _____ ___ ") / 2, "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
+    mvwprintw(stdscr, (height / 2) - 4  + 2, width / 2 - strlen("   ___   _   __  __ ___    _____   _____ ___ ") / 2, " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
+    mvwprintw(stdscr, (height / 2) - 4 + 3, width / 2 - strlen("   ___   _   __  __ ___    _____   _____ ___ ") / 2, "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+    mvwprintw(stdscr, (height / 2) - 4 + 5, width / 2 + strlen("Try Again?"), "Try Again?");
+    refresh();
+    napms(5000);
+    clear();
+}
 void Layout::write_information(int health, int damage, int shield){
     mvwprintw(info, 1, 1, " ___  ___  ___  ___  ___ ");
     mvwprintw(info, 2, 1, "/ __>|_ _|| . ||_ _|/ __>");
@@ -34,12 +44,16 @@ void Layout::clearwin()
 }
 int Layout::main_menu()
 {
-    char menu[3][20] = {"NUOVA PARTITA", "SHOP", "ESCI DAL GIOCO"};
+    char menu[3][20] = {"NUOVA PARTITA", "CONTINUA PARTITA", "ESCI DAL GIOCO"};
     bool exit = false;
     int ch;
     int scelta = 0;
     while (!exit)
     {
+        wattron(stdscr, A_BOLD);
+        mvwprintw(stdscr, (height / 2)  - 10, width / 2 - strlen("@'s @dventure! ") / 2, " @'s @dventure!");
+        wattroff(stdscr, A_BOLD);
+        mvwprintw(stdscr, (height / 2) + (4 * 3) - 4, width / 2 - strlen("(!) Ricorda di avviare in schermo intero") / 2, "(!) Ricorda di avviare in schermo intero");
         for (int i = 0; i < 3; i++)
         {
             if (scelta == i)

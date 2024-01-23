@@ -188,8 +188,7 @@ void Game::run()
     layout->init_screen();
 
     // Mostra il menu principale e ottieni la scelta dell'utente
-    int scelta = layout->main_menu();
-
+   int scelta = layout->main_menu();
     if (scelta)
     {
         clear();
@@ -356,7 +355,7 @@ void Game::run()
                     base_en=rooms->get_current_enemy();
                 }
             }
-        }
+        } // else continua
 
         // Aggiorna lo schermo principale
         refresh();
