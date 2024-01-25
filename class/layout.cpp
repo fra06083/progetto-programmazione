@@ -19,6 +19,7 @@ void Layout::draw_box()
     refresh();
 }
 void Layout::game_over(){
+    clear();
     mvwprintw(stdscr, (height / 2) - 4, width / 2 - strlen("  ___   _   __  __ ___    _____   _____ ___ ") / 2, "   ___   _   __  __ ___    _____   _____ ___ ");
     mvwprintw(stdscr, (height / 2)  - 4 + 1, width / 2 - strlen("  ___   _   __  __ ___    _____   _____ ___ ") / 2, "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
     mvwprintw(stdscr, (height / 2) - 4  + 2, width / 2 - strlen("   ___   _   __  __ ___    _____   _____ ___ ") / 2, " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
@@ -26,19 +27,25 @@ void Layout::game_over(){
     mvwprintw(stdscr, (height / 2) - 4 + 5, width / 2 + strlen("Try Again?"), "Try Again?");
     refresh();
     napms(5000);
-    clear();
 }
-void Layout::write_information(int health, int damage, int shield){
-    mvwprintw(info, 1, 1, " ___  ___  ___  ___  ___ ");
-    mvwprintw(info, 2, 1, "/ __>|_ _|| . ||_ _|/ __>");
-    mvwprintw(info, 3, 1, "\\__ \\ | | |   | | | \\__ \\");
-    mvwprintw(info, 4, 1, "<___/ |_| |_|_| |_| <___/");
-    mvwprintw(info, 6, 1, "VITA: RIMANENTE+SCUDO/%i", health);
+void Layout::write_information(int health, int shield, int maxhp, int damage){
+    mvwprintw(info, 1, 1, " ___ _____ _ _____ ___ ");
+    mvwprintw(info, 2, 1, "/ __|_   _/_\\_   _/ __|");
+    mvwprintw(info, 3, 1, "\\__ \\ | |/ _ \\| | \\__ \\");
+    mvwprintw(info, 4, 1, "|___/ |_/_/ \\_\\_| |___/");
+    if (shield)
+    mvwprintw(info, 6, 1, "VITA: %i+%i/%i", health, shield, maxhp);
+    else
+    mvwprintw(info, 6, 1, "VITA: %i/%i", health, maxhp);
     mvwprintw(info, 7, 1, "DANNO: %i", damage);
     wrefresh(info);
 }
-void Layout::shop(){
-    
+void Layout::shop(objects items){
+    mvwprintw(info, 1, 1, " ___ _  _  ___  ___ ");
+    mvwprintw(info, 2, 1, "/ __| || |/ _ \\| _ \\");
+    mvwprintw(info, 3, 1, "\\__ \\ __ | (_) |  _/");
+    mvwprintw(info, 4, 1, "|___/_||_|\\___/|_|  ");
+    wrefresh(info);
 }
 void Layout::clearwin()
 {
@@ -47,6 +54,7 @@ void Layout::clearwin()
 }
 int Layout::main_menu()
 {
+    clear();
     char menu[3][20] = {"NUOVA PARTITA", "CONTINUA PARTITA", "ESCI DAL GIOCO"};
     bool exit = false;
     int ch;

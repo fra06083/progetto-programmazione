@@ -202,6 +202,7 @@ void Game::run()
 {
     // Inizializza lo schermo di gioco
     layout->init_screen();
+    quit = false;
 
     // Mostra il menu principale e ottieni la scelta dell'utente
    int scelta = layout->main_menu();
@@ -238,7 +239,7 @@ void Game::run()
 
                 // Disegna il bordo del gioco
                 layout->draw_box();
-                 layout->write_information(player->health, player->damage, 100); // sostituito con player->health
+                 layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
                 // Disegna e aggiorna i nemici
                 if (base_en != nullptr && rooms->current_room%5!=0)
                 {   
@@ -276,7 +277,6 @@ void Game::run()
                     // Rimuovi i proiettili
                     proiettile = tail_delete(proiettile, map);
                 }
-
                 // Gestisci l'input dell'utente
                 int ch = getch();
                 if (ch == ' ')
@@ -326,6 +326,14 @@ void Game::run()
                     this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
                 }
                 
+                // GAME OVER
+                if (player->health == 0){
+                    
+                    layout->game_over();
+                    napms(100);
+                    quit = true;
+                    this->run();
+                }
                 shop_control();
                 wrefresh(layout->game);
                 

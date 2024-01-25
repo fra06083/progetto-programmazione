@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     // qui faremo la dichiarazione dei puntatori con la macroclasse che può gestirli
     Layout *layout = new Layout();
     Map *map = new Map();
-    Player *player = new Player(MAX_X-START_X+1, MAX_Y-2,8, map, 100); // il valore 100 è la vita, la prenderà dal salvataggio.
+    Player *player = new Player(MAX_X-START_X+1, MAX_Y-2,8, map, 40); // il valore 40 è la vita, la prenderà dal salvataggio.
     p_base_en base_enemy = NULL;
    
     p_pro proiettile=NULL;

@@ -12,7 +12,7 @@ public:
     Map *map;
     int x, y, jump_max;
     int gravity;
-    int Valuta, health=40, shield=0;
+    int Valuta, health=40, maxhp = 40, shield=0;
     int damage=1;
     bool isJumping, fall, isAlive;
      
