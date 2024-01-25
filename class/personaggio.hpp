@@ -4,7 +4,7 @@
 #define MAX_X 80
 #include <ncurses.h>
 #include "map/map.hpp"
-#include "proiettile.hpp"
+
 class Player
 {
 public:
@@ -12,7 +12,7 @@ public:
     Map *map;
     int x, y, jump_max;
     int gravity;
-    int Valuta, health;
+    int Valuta, health=40, shield=0;
     int damage=1;
     bool isJumping, fall, isAlive;
      

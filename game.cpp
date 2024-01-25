@@ -45,10 +45,10 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             }
                 count->b_en->timer+= 1;
                 int deltaX = player->x - count->b_en->x_;
-                if(deltaX>0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX>0 && player->x-1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'r');
                 }
-                if(deltaX<0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX<0 && player->x+1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'l');
                 }
                 
@@ -56,11 +56,27 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             while (proiettileNemico != NULL) {
                 if (proiettileNemico->pro != nullptr && proiettileNemico->pro->isAttivo()) {
                     proiettileNemico->pro->move(layout->game, proiettileNemico, proiettileNemico->pro->dir);
+                    
+                    if((proiettileNemico->pro->x==player->x || proiettileNemico->pro->x==player->x-1
+                    || proiettileNemico->pro->x==player->x+1)&& proiettileNemico->pro->y==player->y){
+                        if(player->shield - count->b_en->damage >=0){
+                            player->shield = player->shield - count->b_en->damage;
+                        }
+                        else if(player->shield - count->b_en->damage <0){
+                            player->health = player->health + player->shield - count->b_en->damage;
+                            player->shield =0;
+                        }
+                        else if(player->shield==0){
+                        player->health = player->health - count->b_en->damage;
+                        
+                        }
+
+                    }
                 }
                 proiettileNemico = proiettileNemico->next;
             }
-
-            count->b_en->proiettili = pro_tail_delete(count->b_en->proiettili, map);
+            
+            count->b_en->proiettili = pro_tail_delete(count->b_en->proiettili, map, player);
 
                 count->b_en->draw(game);                            
                 prev = count;
