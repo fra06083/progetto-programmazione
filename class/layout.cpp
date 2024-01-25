@@ -37,6 +37,9 @@ void Layout::write_information(int health, int damage, int shield){
     mvwprintw(info, 7, 1, "DANNO: %i", damage);
     wrefresh(info);
 }
+void Layout::shop(){
+    
+}
 void Layout::clearwin()
 {
     clear();

@@ -14,6 +14,7 @@ public:
   void init_screen();
   int main_menu();
   void game_over();
+  void shop();
   void write_information(int health, int damage, int shield);
   void draw_box();
   void clearwin();
