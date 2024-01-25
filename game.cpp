@@ -203,7 +203,10 @@ void Game::run()
     // Inizializza lo schermo di gioco
     layout->init_screen();
     quit = false;
-
+    if (gameover){
+    player->health = player->maxhp;
+    gameover = false;
+    }
     // Mostra il menu principale e ottieni la scelta dell'utente
    int scelta = layout->main_menu();
     if (scelta)
@@ -239,7 +242,7 @@ void Game::run()
 
                 // Disegna il bordo del gioco
                 layout->draw_box();
-                 layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
+                layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
                 // Disegna e aggiorna i nemici
                 if (base_en != nullptr && rooms->current_room%5!=0)
                 {   
@@ -327,11 +330,12 @@ void Game::run()
                 }
                 
                 // GAME OVER
-                if (player->health == 0){
+                if (player->health <= 0){
                     
                     layout->game_over();
                     napms(100);
                     quit = true;
+                    gameover = true;
                     this->run();
                 }
                 shop_control();

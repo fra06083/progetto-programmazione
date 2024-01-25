@@ -15,7 +15,6 @@ void Layout::draw_box()
 {
     box(stdscr, 0, 0);
     box(game, 0, 0);
-    box(info, 0, 0);
     refresh();
 }
 void Layout::game_over(){

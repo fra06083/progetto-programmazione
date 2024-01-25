@@ -23,7 +23,7 @@ private:
   p_pro proiettile;
   objects* all_obj=new objects;
   object* current_obj;
-  bool quit = false;
+  bool quit , gameover = false;
   int counter=0;
   int random_number=rand();
   char R_shop_symbol[3];
