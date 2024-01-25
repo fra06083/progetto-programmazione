@@ -198,6 +198,170 @@ void Game::shop_control(){
     notimeout(layout->game, true);
 }
 
+void Game::gameLOOP(){
+    char p_direction = 'r'; // Inizializzazione direzione proiettile
+
+    // Loop principale del gioco
+    while (!quit)
+    {
+        // Imposta la modalità di attesa per l'input
+        halfdelay(1);
+
+        erase();
+
+        // Disegna la mappa
+        drawMap(layout, map);
+        srand(time(NULL));
+
+        // Disegna il bordo del gioco
+        layout->draw_box();
+        layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
+        // Disegna e aggiorna i nemici
+        if (base_en != nullptr && rooms->current_room%5!=0)
+        {   
+            base_en->b_en->draw(layout->game);
+            werase(layout->game);
+            drawMap(layout, map);
+            srand(time(NULL));
+            layout->draw_box();
+           
+            base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
+        } 
+        rooms->room_enemy[rooms->current_room]=base_en;
+
+        // Disegna il giocatore
+        player->draw(layout->game);
+
+        shop_control();
+
+        // Aggiorna lo schermo
+        wrefresh(layout->game);
+
+        // Gestisci i proiettili
+        if (proiettile != NULL)
+        {
+            p_pro count = proiettile;
+            while (count != NULL)
+            {
+        if (count->pro->isAttivo())
+        {
+            count->pro->move(layout->game, proiettile, count->pro->dir);
+        }
+        count = count->next;
+            }
+
+            // Rimuovi i proiettili
+            proiettile = tail_delete(proiettile, map);
+        }
+        // Gestisci l'input dell'utente
+        int ch = getch();
+        if (ch == ' ')
+        {
+            // Sparo di un proiettile
+            Proiettile *p = new Proiettile(player->x, player->y);
+            p->spara();
+            p->dir = p_direction;
+            proiettile = head_insert(proiettile, p);
+            proiettile->pro->draw(layout->game, player->x, player->y);
+
+            wrefresh(layout->game);
+        }
+        if (ch == 'a' || ch == 'A' || ch == KEY_LEFT)
+        {
+            // Movimento a sinistra del giocatore
+            player->p_move(layout->game, 'l');
+            p_direction = 'l';
+        }
+        if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT)
+        {
+            // Movimento a destra del giocatore
+            player->p_move(layout->game, 'r');
+            p_direction = 'r';
+        }
+        if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping))
+        {
+            // Inizia il salto se il giocatore non è già in salto o cadendo
+            player->isJumping = true;
+        }
+        if (ch == 'e')
+        {
+            // Esci dal gioco
+            quit = true;
+        }
+        if (map->platformUnder(player->x, player->y))
+            player->fall = false;
+        if (!player->isJumping && !map->platformUnder(player->x, player->y))
+        {
+            // Se il giocatore non sta saltando e non è su una piattaforma, sta cadendo
+            player->fall = true;
+            player->y++;
+        }
+        if (player->isJumping && !player->fall)
+        {
+            // Aggiorna la fase di salto del giocatore
+            this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
+        }
+        
+        // GAME OVER
+        if (player->health <= 0){
+            
+            layout->game_over();
+            napms(100);
+            quit = true;
+            gameover = true;
+            this->run();
+        }
+        shop_control();
+        wrefresh(layout->game);
+        
+
+        // Caso in cui siamo già nell'ultima stanza generata
+        if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room && rooms->current_room != 2){
+            
+            //Genera e salva nuove mappe
+            map=rooms->generate_new_room(); 
+
+            //Riporta la x all'inizio alla generazione della nuova mappa
+            player->x=2; 
+
+            //controlla non ci siano piattaforme e sposta il player di conseguenza
+            if (map->isPlatform(player->y, player->x)){
+        player->y--;
+            }         
+            base_en=rooms->get_current_enemy();
+
+            saveGame(all_obj, player);
+        }
+
+        if (rooms->current_room == 2 && rooms->current_room == rooms->last_room){
+            next_map=rooms->generate_new_room();
+            rooms->current_room--;
+        }
+
+        //Caso in cui vogliamo tornare indietro
+        if (player->x==1 && rooms->current_room != 0){
+            map=rooms->load_room(rooms->current_room-1);
+            player->x=MAX_X-2;
+            if (map->isPlatform(player->y, player->x)){
+                player->y--;
+            }
+            base_en=rooms->get_current_enemy();
+            saveGame(all_obj, player);
+        }
+
+        //Caso in cui si va avanti ma non siamo nell'ultima stanza
+        if (player->x==MAX_X-1 && rooms->current_room != rooms->last_room){
+            map=rooms->load_room(rooms->current_room+1);
+            player->x=2;
+            if (map->isPlatform(player->y, player->x)){
+                player->y--;
+            }
+            base_en=rooms->get_current_enemy();
+            saveGame(all_obj, player);
+        }
+    }
+}
+
 void Game::run()
 {
     // Inizializza lo schermo di gioco
@@ -205,6 +369,7 @@ void Game::run()
     quit = false;
     if (gameover){
     player->health = player->maxhp;
+    saveGame(all_obj, player);
     gameover = false;
     }
     // Mostra il menu principale e ottieni la scelta dell'utente
@@ -219,171 +384,33 @@ void Game::run()
             // Genera la mappa di gioco
             map->generateFirstMap();
             rooms=new room(map);
-            // Inizializza il giocatore
+            saveGame(all_obj, player);
+           // Inizializza il giocatore
             player->init();
 
             bool game_over = false;
-            char p_direction = 'r'; // Inizializzazione direzione proiettile
-            int counter_nemici = 100;
+            quit=false;
             
             std::srand(std::time(0));
 
-            // Loop principale del gioco
-            while (!quit)
-            {
-                // Imposta la modalità di attesa per l'input
-                halfdelay(1);
+            gameLOOP();
 
-                erase();
+        }
 
-                // Disegna la mappa
-                drawMap(layout, map);
-                srand(time(NULL));
+        else if(scelta==2){
+            map->generateFirstMap();
+            rooms=new room(map);
+            loadGame(all_obj, player);
+            
+            player->init();
 
-                // Disegna il bordo del gioco
-                layout->draw_box();
-                layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
-                // Disegna e aggiorna i nemici
-                if (base_en != nullptr && rooms->current_room%5!=0)
-                {   
-                    base_en->b_en->draw(layout->game);
-                    werase(layout->game);
-                    drawMap(layout, map);
-                    srand(time(NULL));
-                    layout->draw_box();
-                   
-                    base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
-                } 
-                rooms->room_enemy[rooms->current_room]=base_en;
+            bool game_over=false;
+            quit=false;
 
-                // Disegna il giocatore
-                player->draw(layout->game);
+            std::srand(std::time(0));
 
-                shop_control();
-
-                // Aggiorna lo schermo
-                wrefresh(layout->game);
-
-                // Gestisci i proiettili
-                if (proiettile != NULL)
-                {
-                    p_pro count = proiettile;
-                    while (count != NULL)
-                    {
-                        if (count->pro->isAttivo())
-                        {
-                            count->pro->move(layout->game, proiettile, count->pro->dir);
-                        }
-                        count = count->next;
-                    }
-
-                    // Rimuovi i proiettili
-                    proiettile = tail_delete(proiettile, map);
-                }
-                // Gestisci l'input dell'utente
-                int ch = getch();
-                if (ch == ' ')
-                {
-                    // Sparo di un proiettile
-                    Proiettile *p = new Proiettile(player->x, player->y);
-                    p->spara();
-                    p->dir = p_direction;
-                    proiettile = head_insert(proiettile, p);
-                    proiettile->pro->draw(layout->game, player->x, player->y);
-
-                    wrefresh(layout->game);
-                }
-                if (ch == 'a' || ch == 'A' || ch == KEY_LEFT)
-                {
-                    // Movimento a sinistra del giocatore
-                    player->p_move(layout->game, 'l');
-                    p_direction = 'l';
-                }
-                if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT)
-                {
-                    // Movimento a destra del giocatore
-                    player->p_move(layout->game, 'r');
-                    p_direction = 'r';
-                }
-                if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping))
-                {
-                    // Inizia il salto se il giocatore non è già in salto o cadendo
-                    player->isJumping = true;
-                }
-                if (ch == 'e')
-                {
-                    // Esci dal gioco
-                    quit = true;
-                }
-                if (map->platformUnder(player->x, player->y))
-                    player->fall = false;
-                if (!player->isJumping && !map->platformUnder(player->x, player->y))
-                {
-                    // Se il giocatore non sta saltando e non è su una piattaforma, sta cadendo
-                    player->fall = true;
-                    player->y++;
-                }
-                if (player->isJumping && !player->fall)
-                {
-                    // Aggiorna la fase di salto del giocatore
-                    this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
-                }
-                
-                // GAME OVER
-                if (player->health <= 0){
-                    
-                    layout->game_over();
-                    napms(100);
-                    quit = true;
-                    gameover = true;
-                    this->run();
-                }
-                shop_control();
-                wrefresh(layout->game);
-                
-
-                // Caso in cui siamo già nell'ultima stanza generata
-                if (player->x==MAX_X-1 && rooms->current_room == rooms->last_room && rooms->current_room != 2){
-                    
-                    //Genera e salva nuove mappe
-                    map=rooms->generate_new_room(); 
-
-                    //Riporta la x all'inizio alla generazione della nuova mappa
-                    player->x=2; 
-
-                    //controlla non ci siano piattaforme e sposta il player di conseguenza
-                    if (map->isPlatform(player->y, player->x)){
-                        player->y--;
-                    }         
-                    base_en=rooms->get_current_enemy();
-                }
-
-                if (rooms->current_room == 2 && rooms->current_room == rooms->last_room){
-                    next_map=rooms->generate_new_room();
-                    rooms->current_room--;
-                }
-
-                //Caso in cui vogliamo tornare indietro
-                if (player->x==1 && rooms->current_room != 0){
-                    map=rooms->load_room(rooms->current_room-1);
-                    player->x=MAX_X-2;
-                    if (map->isPlatform(player->y, player->x)){
-                        player->y--;
-                    }
-                    base_en=rooms->get_current_enemy();
-                }
-
-                //Caso in cui si va avanti ma non siamo nell'ultima stanza
-                if (player->x==MAX_X-1 && rooms->current_room != rooms->last_room){
-                    map=rooms->load_room(rooms->current_room+1);
-                    player->x=2;
-                    if (map->isPlatform(player->y, player->x)){
-                        player->y--;
-                    }
-                    base_en=rooms->get_current_enemy();
-                }
-            }
-        } // else continua
+            gameLOOP();
+        }
 
         // Aggiorna lo schermo principale
         refresh();

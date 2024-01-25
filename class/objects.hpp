@@ -20,4 +20,8 @@ class objects {
     object* get_all_obj();
 
     void buy_obj (object current_obj);
+
+    int get_possession (int position);
+
+    void load_possession (int position, int n);
 };

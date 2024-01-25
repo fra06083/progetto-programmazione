@@ -77,3 +77,11 @@ void objects::buy_obj(object current_obj){
         }
     }
 }
+
+int objects::get_possession(int position){
+    return all_obj[position].possession;
+}
+
+void objects::load_possession(int position, int n){
+    all_obj[position].possession=n;
+}
