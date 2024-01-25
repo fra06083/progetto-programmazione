@@ -3,7 +3,6 @@
 #include <iostream>
 #include <ncurses.h>
 #include "map/map.hpp"
-#include "personaggio.hpp"
 
  struct lista_proiettili;
 class Proiettile {
@@ -30,5 +29,5 @@ struct lista_proiettili{
 typedef lista_proiettili* p_pro;
 p_pro head_insert(p_pro& list, Proiettile* pr);
 p_pro tail_delete(p_pro list,  Map *map);
-p_pro pro_tail_delete(p_pro list, Map *map, Player* player);
+p_pro pro_tail_delete(p_pro list, Map *map);
 #endif //PROIETTILE_HPP

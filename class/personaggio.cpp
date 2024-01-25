@@ -1,8 +1,8 @@
 #include <ncurses.h>
 #include <iostream>
 #include <ctime>
-#include "personaggio.hpp" // health prenderà dal file di salvataggio il dato se non esiste, mette 100
-Player::Player(int startX, int startY,int jump_m, Map *m, int h) : health(h), x(startX),jump_max(jump_m), y(startY), map(m), isAlive(true), isJumping(false), gravity(1){}
+#include "personaggio.hpp"
+Player::Player(int startX, int startY,int jump_m, Map *m) : x(startX),jump_max(jump_m), y(startY), map(m), isAlive(true), isJumping(false), gravity(1){}
 void Player::draw(WINDOW *game)
 {
     mvwprintw(game, y, x, "@");

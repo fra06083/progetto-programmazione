@@ -5,6 +5,7 @@
 #include "class/personaggio.hpp"
 #include "class/map/map.hpp"
 #include "class/map/room.hpp"
+#include "savingSystem/SaveLoad.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -36,6 +37,7 @@ public:
  
   void drawMap (Layout *game_window, Map *game_map);
   void shop_control();
+  void gameLOOP();
   void run();
   
 };

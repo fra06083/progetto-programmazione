@@ -82,14 +82,12 @@ p_pro tail_delete(p_pro list, Map *map) {
     return list;
 }
 
-p_pro pro_tail_delete(p_pro list, Map *map, Player* player) {
+p_pro pro_tail_delete(p_pro list, Map *map) {
     p_pro prevNode = NULL;
     p_pro currentNode = list;
 
     while (currentNode != NULL) {
-        if (currentNode->pro->x >= 80 || currentNode->pro->x<=2 ||
-         ((player->x==currentNode->pro->x || player->x+1==currentNode->pro->x || player->x-1==currentNode->pro->x) && player->y==currentNode->pro->y)
-         || map->isPlatform(currentNode->pro->x+1,currentNode->pro->y)) {
+        if (currentNode->pro->x >= 80 || currentNode->pro->x<=2 || map->isPlatform(currentNode->pro->x+1,currentNode->pro->y)) {
             p_pro nextNode = currentNode->next;
             
             delete currentNode->pro;
