@@ -40,6 +40,7 @@ public:
     int timer=3;
     int damage;
     void draw(WINDOW *win);
+    bool enemyattack(int playerX, int playerY);
     void cancella(WINDOW *win);
     p_pro proiettili=NULL;
     void move(WINDOW* game,Map *map, char c);

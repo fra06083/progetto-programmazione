@@ -33,7 +33,9 @@
             simbolo='Z';
         }
     }
-
+    bool Base_en::enemyattack(int playerX, int playerY){
+        return (playerY == y_ && (playerX-1 == x_ || playerX+1 == x_));
+    }
     void Base_en::draw(WINDOW *win)
     { 
         if(!dead){

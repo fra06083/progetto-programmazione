@@ -7,7 +7,7 @@
     }
 bool Proiettile::isAttivo() {
     // Rimuovi il controllo this == nullptr
-    return sparato && x < 80;  // Assumi che 80 sia il limite dello schermo
+    return sparato && x < 78;  // Assumi che 80 sia il limite dello schermo
 }
 
     void Proiettile::move(WINDOW *game, lista_proiettili *proiettile, char dir) {

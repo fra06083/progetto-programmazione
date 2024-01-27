@@ -8,7 +8,7 @@ void Layout::init_screen()
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, height, width);
     game = subwin(stdscr, gheight + 3, gwidth + 1, START_Y, START_X);
-    info = subwin(stdscr, gheight +3, gwidth+5, 2, gwidth+5);
+    info = subwin(stdscr, gheight +3, gwidth+3, 2, gwidth+20);
     getmaxyx(game, gx, gy);
 }
 void Layout::draw_box()
@@ -27,24 +27,33 @@ void Layout::game_over(){
     refresh();
     napms(5000);
 }
-void Layout::write_information(int health, int shield, int maxhp, int damage){
+void Layout::write_information(int health, int shield, int maxhp, int damage, int gold, int livello, int conto){
     mvwprintw(info, 1, 1, " ___ _____ _ _____ ___ ");
     mvwprintw(info, 2, 1, "/ __|_   _/_\\_   _/ __|");
     mvwprintw(info, 3, 1, "\\__ \\ | |/ _ \\| | \\__ \\");
     mvwprintw(info, 4, 1, "|___/ |_/_/ \\_\\_| |___/");
+    mvwprintw(info, 6, 1, "LIVELLO: %i", livello);
     if (shield)
-    mvwprintw(info, 6, 1, "VITA: %i+%i/%i", health, shield, maxhp);
-    else
-    mvwprintw(info, 6, 1, "VITA: %i/%i", health, maxhp);
-    mvwprintw(info, 7, 1, "DANNO: %i", damage);
+    mvwprintw(info, 7, 1, "VITA: %i+%i/%i", health, shield, maxhp);
+    else 
+    mvwprintw(info, 8, 1, "VITA: %i/%i", health, maxhp);
+    mvwprintw(info, 9, 1, "ORO: %i", gold);
+    mvwprintw(info, 10, 1, "DANNO: %i", damage);
+    
+    if (conto > 0) 
+    mvwprintw(info, 14, 1, "RELOADING AMMO....");
+    else 
+    mvwprintw(info, 14, 1, " ");
     wrefresh(info);
 }
-void Layout::shop(objects items){
+void Layout::shop(object* item, int coin){
     mvwprintw(info, 1, 1, " ___ _  _  ___  ___ ");
     mvwprintw(info, 2, 1, "/ __| || |/ _ \\| _ \\");
     mvwprintw(info, 3, 1, "\\__ \\ __ | (_) |  _/");
     mvwprintw(info, 4, 1, "|___/_||_|\\___/|_|  ");
     wrefresh(info);
+      
+    
 }
 void Layout::clearwin()
 {
@@ -76,9 +85,8 @@ int Layout::main_menu()
         refresh();
         ch = getch();
 
-        switch (ch)
+        if (ch == KEY_UP || ch == 'w' || ch == 'W')
         {
-        case KEY_UP:
             if (scelta > 0)
             {
                 scelta--;
@@ -87,8 +95,8 @@ int Layout::main_menu()
             {
                 scelta = 2;
             }
-            break;
-        case KEY_DOWN:
+        }
+        if (ch == KEY_DOWN || ch == 'S' || ch == 's'){
             if (scelta < 2)
             {
                 scelta++;
@@ -97,8 +105,8 @@ int Layout::main_menu()
             {
                 scelta = 0;
             }
-            break;
-        case '\n':
+        }
+        if (ch == '\n'){
             exit = true;
             return scelta + 1;
         }

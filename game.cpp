@@ -38,6 +38,10 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
 
         while (count != nullptr)
         {
+            if (count->b_en->enemyattack(player->x, player->y) && contatore <= 0){
+              player->health = player->health-2;
+               contatore = 20;
+            }
             if (!count->b_en->dead)
             {   if(count->b_en->timer==20){
                 count->b_en->sparareProiettile(player->x, player->y);
@@ -215,7 +219,7 @@ void Game::gameLOOP(){
 
         // Disegna il bordo del gioco
         layout->draw_box();
-        layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
+        layout->write_information(player->health, player->shield, player->maxhp, player->damage, player->Valuta, rooms->current_room, cooldown); // sostituito con player->health
         // Disegna e aggiorna i nemici
         if (base_en != nullptr && rooms->current_room%5!=0)
         {   
@@ -255,9 +259,10 @@ void Game::gameLOOP(){
         }
         // Gestisci l'input dell'utente
         int ch = getch();
-        if (ch == ' ')
+        if (ch == ' ' && cooldown  <= 0)
         {
             // Sparo di un proiettile
+            cooldown = 50;
             Proiettile *p = new Proiettile(player->x, player->y);
             p->spara();
             p->dir = p_direction;
@@ -266,17 +271,23 @@ void Game::gameLOOP(){
 
             wrefresh(layout->game);
         }
+        cooldown--;
+        contatore--;
         if (ch == 'a' || ch == 'A' || ch == KEY_LEFT)
         {
             // Movimento a sinistra del giocatore
+            if (!Base_isPositionOccupied(layout->game, player->x, player->y, -1)){
             player->p_move(layout->game, 'l');
             p_direction = 'l';
+            }
         }
         if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT)
         {
             // Movimento a destra del giocatore
+            if (!Base_isPositionOccupied(layout->game, player->x, player->y, 1)){
             player->p_move(layout->game, 'r');
             p_direction = 'r';
+            }
         }
         if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping))
         {
@@ -288,14 +299,14 @@ void Game::gameLOOP(){
             // Esci dal gioco
             quit = true;
         }
-        if (map->platformUnder(player->x, player->y))
-            player->fall = false;
         if (!player->isJumping && !map->platformUnder(player->x, player->y))
         {
             // Se il giocatore non sta saltando e non è su una piattaforma, sta cadendo
             player->fall = true;
             player->y++;
         }
+        if (map->platformUnder(player->x, player->y))
+        player->fall = false;
         if (player->isJumping && !player->fall)
         {
             // Aggiorna la fase di salto del giocatore
