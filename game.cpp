@@ -173,33 +173,37 @@ void Game::shop_control(){
 
     //Current_obj è uguale all'oggetto di cui riconosce i simboli ( H ,+ +...), nullptr altrimenti
     current_obj=all_obj->get_current_object(R_shop_symbol);
-
-    //Imposta temporaneamente un timeout di 60s per rendere difficile mancare il getch
-    wtimeout(layout->game, 60000);
-
+    
     //Entra in questo if solo se ci trviamo davanti ad uno shop
     if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
+        if (buy && player->Valuta>=current_obj->price){
+            player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
+            player->set_stats(all_obj);
+            if(strcmp(R_shop_symbol, " H ")== 0) player->heal();
+            if(strcmp(R_shop_symbol, " # ")== 0) player->set_shield();
             rooms->normal_maps[rooms->current_room]->shop_used=true;
             drawMap(layout, map);
             wrefresh(layout->game);
+            saveGame(all_obj, player);
         }
     }
 
     //Uguale al precedente ma dal lato sinistro
     current_obj=all_obj->get_current_object(L_shop_symbol);
     if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
+        if (buy && player->Valuta>=current_obj->price){
+            player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
+            player->set_stats(all_obj);
+            if(strcmp(L_shop_symbol, " H ")== 0) player->heal();
+            if(strcmp(L_shop_symbol, " # ")== 0) player->set_shield();
             rooms->normal_maps[rooms->current_room]->shop_used=true;
             drawMap(layout, map);
             wrefresh(layout->game);
+            saveGame(all_obj, player)
         }
     }
-
-    //Elimina il timeout temporaneo
-    notimeout(layout->game, true);
 }
 
 void Game::gameLOOP(){
@@ -259,6 +263,7 @@ void Game::gameLOOP(){
         }
         // Gestisci l'input dell'utente
         int ch = getch();
+        buy=false;
         if (ch == ' ' && cooldown  <= 0)
         {
             // Sparo di un proiettile
@@ -294,6 +299,7 @@ void Game::gameLOOP(){
             // Inizia il salto se il giocatore non è già in salto o cadendo
             player->isJumping = true;
         }
+        if (ch=='\n')buy=true;
         if (ch == 'e')
         {
             // Esci dal gioco
@@ -337,7 +343,7 @@ void Game::gameLOOP(){
 
             //controlla non ci siano piattaforme e sposta il player di conseguenza
             if (map->isPlatform(player->y, player->x)){
-        player->y--;
+                player->y--;
             }         
             base_en=rooms->get_current_enemy();
 
@@ -379,9 +385,9 @@ void Game::run()
     layout->init_screen();
     quit = false;
     if (gameover){
-    player->health = player->maxhp;
-    saveGame(all_obj, player);
-    gameover = false;
+        player->health = player->maxhp;
+        saveGame(all_obj, player);
+        gameover = false;
     }
     // Mostra il menu principale e ottieni la scelta dell'utente
    int scelta = layout->main_menu();
@@ -412,7 +418,8 @@ void Game::run()
             map->generateFirstMap();
             rooms=new room(map);
             loadGame(all_obj, player);
-            
+
+            player->set_stats();
             player->init();
 
             bool game_over=false;
