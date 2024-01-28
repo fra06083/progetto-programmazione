@@ -25,11 +25,12 @@ private:
   objects* all_obj=new objects;
   object* current_obj;
   bool quit , gameover = false;
+  bool buy=false;
   int counter=0, cooldown=0, contatore =20; // il secondo è un cooldown per sparare, il terzo serve per infliggere danno al giocatore
   bool canShoot = true;
   int random_number=rand();
-  char R_shop_symbol[3];
-  char L_shop_symbol[3];
+  char R_shop_symbol[4];
+  char L_shop_symbol[4];
 
 public:
   Game(Layout *l, Map *m, Player *p, p_base_en b_en, p_pro pr);
