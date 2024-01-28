@@ -44,4 +44,21 @@ void Player::p_move(WINDOW *game, char m = 'r')
         draw(game); // Disegno del personaggio nella nuova posizione
      
     }
+
+    //Quando si acquista qualcosa si aggiornano le stats in base ai potenziamenti in possesso
+void Player::set_stats(objects* obj){
+    this->maxhp = 40 + (5*obj->get_possession(5)) + (7*obj->get_possession(6)) + (10*obj->get_possession(7));
+    this->damage= 1 + (1*obj->get_possession(2)) + (2*obj->get_possession(3)) + (3*obj->get_possession(4));
+}
+
+//Imposta uno scudo pari a metà degli hp massimi
+void Player::set_shield(){
+    this->shield=this->maxhp/2;
+}
+
+//Cura di 1/3 degli hp massimi
+void Player::heal(){
+    float HPregen=maxhp/3;
+    health=health + HPregen;
+    if(this->health>this->maxhp) health=this->maxhp;
 }
