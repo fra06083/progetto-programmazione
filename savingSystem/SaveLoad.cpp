@@ -39,21 +39,3 @@ void loadGame(objects* obj_info, Player* player_info){
 
     else std::cerr << "Errore nell'apertura del file." << std::endl;
 }
-
-void deletetSave(){
-    std::ofstream file ("savingSystem/saveFile.txt", std::ios::trunc);
-
-    if (file.is_open()) {
-        for (int i=0; i<9; i++){
-            file<<0<<std::endl; //Azzera i salvataggi
-        }
-
-        file<<40<<std::endl;
-        file<<0<<std::endl;
-        file<<0<<std::endl;
-
-        file.close();
-    }
-
-    else std::cerr << "Errore nell'apertura del file." << std::endl;
-}
