@@ -6,4 +6,3 @@
 
 void saveGame (objects* obj_info, Player* player_info);
 void loadGame (objects* obj_info, Player* player_info);
-void deleteSave ();
