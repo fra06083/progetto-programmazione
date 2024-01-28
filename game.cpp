@@ -132,7 +132,9 @@ void Game::drawMap (Layout *game_window, Map *game_map){
                         for(int k=0; map->isPlatform(tempI++, tempJ); k++){
                             if(k>=5 && tempJ != MAX_Y-1){
                                 mvwprintw(layout->game, j-2, i+1, "___");
-                                switch(rand()%9+1){
+                                int t=rand()%9+1;
+                                if (t==2 && all_obj->get_possession(1)>=10) t++;
+                                switch(t){
                                     case 1:
                                     mvwprintw(layout->game, j-1, i,  "| H |");
                                     break;
@@ -201,7 +203,7 @@ void Game::shop_control(){
             rooms->normal_maps[rooms->current_room]->shop_used=true;
             drawMap(layout, map);
             wrefresh(layout->game);
-            saveGame(all_obj, player)
+            saveGame(all_obj, player);
         }
     }
 }
@@ -419,7 +421,7 @@ void Game::run()
             rooms=new room(map);
             loadGame(all_obj, player);
 
-            player->set_stats();
+            player->set_stats(all_obj);
             player->init();
 
             bool game_over=false;
