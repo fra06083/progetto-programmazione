@@ -4,6 +4,7 @@
 #define MAX_X 80
 #include <ncurses.h>
 #include "map/map.hpp"
+#include "objects.hpp"
 
 class Player
 {
@@ -22,10 +23,9 @@ public:
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    
-   
-    
 
-   
+    void set_stats(objects* obj);
+    void set_shield();
+    void heal();
 };
 #endif // PERSONAGGIO_HPP
