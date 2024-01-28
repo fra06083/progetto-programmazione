@@ -1,6 +1,6 @@
 #include "SaveLoad.hpp"
 
-void saveGame(objects* obj_info, room* room_info){
+void saveGame(objects* obj_info, Player* player_info){
     std::ofstream file ("savingSystem/saveFile.txt", std::ios::trunc);
 
     if (file.is_open()) {
@@ -8,12 +8,9 @@ void saveGame(objects* obj_info, room* room_info){
             file<<obj_info->get_possession(i)<<std::endl;  //Salva il numero di potenziamenti in possesso
         }
 
-        file<<room_info->current_room<<std::endl;  //Salva la stanza corrente
-
-        //Salva i contatori di tutti i nemici
-        file<<room_info->base_en_counter<<std::endl;  
-        file<<room_info->medium_en_counter<<std::endl;
-        file<<room_info->tough_en_counter<<std::endl;
+        file<<player_info->health<<std::endl;
+        file<<player_info->shield<<std::endl;
+        file<<player_info->Valuta<<std::endl;
 
         file.flush();
         file.close();   
@@ -22,7 +19,7 @@ void saveGame(objects* obj_info, room* room_info){
     else std::cerr << "Errore nell'apertura del file." << std::endl;
 }
 
-void loadGame(objects* obj_info, room* room_info){
+void loadGame(objects* obj_info, Player* player_info){
     std::ifstream file ("savingSystem/saveFile.txt");
     int value=0;
 
@@ -32,15 +29,10 @@ void loadGame(objects* obj_info, room* room_info){
         obj_info->load_possession(i,value);  //Carica il numero di potenziamenti in possesso
     }
 
-    //carica e aggiorna le posizioni last room e current room
-    file>>room_info->current_room;
-    room_info->last_room = room_info->current_room;
-    room_info->initial_room=room_info->current_room;
-
-    //Carica i contatori dei nemici;
-    file>>room_info->base_en_counter;
-    file>>room_info->medium_en_counter;
-    file>>room_info->tough_en_counter;
+    file>>player_info->health;
+    file>>player_info->shield;
+    file>>player_info->Valuta;
+    
 
     file.close();
     }
@@ -52,9 +44,14 @@ void deletetSave(){
     std::ofstream file ("savingSystem/saveFile.txt", std::ios::trunc);
 
     if (file.is_open()) {
-        for (int i=0; i<13; i++){
+        for (int i=0; i<9; i++){
             file<<0<<std::endl; //Azzera i salvataggi
         }
+
+        file<<40<<std::endl;
+        file<<0<<std::endl;
+        file<<0<<std::endl;
+
         file.close();
     }
 

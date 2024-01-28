@@ -3,8 +3,9 @@
 #define MAX_Y 24
 #define MAX_X 80
 #include <ncurses.h>
+#include "objects.hpp"
 #include "map/map.hpp"
-#include "proiettile.hpp"
+
 class Player
 {
 public:
@@ -12,20 +13,20 @@ public:
     Map *map;
     int x, y, jump_max;
     int gravity;
-    int Valuta;
+    int maxhp = 40;
+    int Valuta, health=40, shield=0;
     int damage=1;
     bool isJumping, fall, isAlive;
      
     
 
-    Player(int startX, int startY, int jump_max,Map *m);
+    Player(int startX, int startY, int jump_max,Map *m, int health);
     void draw(WINDOW *g);
     void init();
     void p_move(WINDOW *g, char m);
-    
-   
-    
 
-   
+    void set_stats(objects* obj);
+    void set_shield();
+    void heal();
 };
 #endif // PERSONAGGIO_HPP

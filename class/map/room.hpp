@@ -1,4 +1,3 @@
-#pragma once
 #include <cstdlib>
 #include <cstdio>
 #include "map.hpp"
@@ -9,7 +8,6 @@ class room {
 public:
     int current_room;
     int last_room;
-    int initial_room=0;
     int base_en_counter=0;
     int medium_en_counter=0;
     int tough_en_counter=0;

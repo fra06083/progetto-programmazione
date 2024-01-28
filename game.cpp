@@ -45,10 +45,10 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             }
                 count->b_en->timer+= 1;
                 int deltaX = player->x - count->b_en->x_;
-                if(deltaX>0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX>0 && player->x-1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'r');
                 }
-                if(deltaX<0 && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX<0 && player->x+1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'l');
                 }
                 
@@ -56,11 +56,27 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             while (proiettileNemico != NULL) {
                 if (proiettileNemico->pro != nullptr && proiettileNemico->pro->isAttivo()) {
                     proiettileNemico->pro->move(layout->game, proiettileNemico, proiettileNemico->pro->dir);
+                    
+                    if((proiettileNemico->pro->x==player->x || proiettileNemico->pro->x==player->x-1
+                    || proiettileNemico->pro->x==player->x+1)&& proiettileNemico->pro->y==player->y){
+                        if(player->shield - count->b_en->damage >=0){
+                            player->shield = player->shield - count->b_en->damage;
+                        }
+                        else if(player->shield - count->b_en->damage <0){
+                            player->health = player->health + player->shield - count->b_en->damage;
+                            player->shield =0;
+                        }
+                        else if(player->shield==0){
+                        player->health = player->health - count->b_en->damage;
+                        
+                        }
+
+                    }
                 }
                 proiettileNemico = proiettileNemico->next;
             }
-
-            count->b_en->proiettili = pro_tail_delete(count->b_en->proiettili, map);
+            
+            count->b_en->proiettili = pro_tail_delete(count->b_en->proiettili, map, player);
 
                 count->b_en->draw(game);                            
                 prev = count;
@@ -154,32 +170,36 @@ void Game::shop_control(){
     //Current_obj è uguale all'oggetto di cui riconosce i simboli ( H ,+ +...), nullptr altrimenti
     current_obj=all_obj->get_current_object(R_shop_symbol);
 
-    //Imposta temporaneamente un timeout di 60s per rendere difficile mancare il getch
-    wtimeout(layout->game, 60000);
-
     //Entra in questo if solo se ci trviamo davanti ad uno shop
     if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
+        if (buy && player->Valuta>=current_obj->price){
+            player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
+            player->set_stats(all_obj);
+            if(strcmp(R_shop_symbol, " H ")== 0) player->heal();
+            if(strcmp(R_shop_symbol, " # ")== 0) player->set_shield();
             rooms->normal_maps[rooms->current_room]->shop_used=true;
             drawMap(layout, map);
             wrefresh(layout->game);
+            saveGame(all_obj, player);
         }
     }
 
     //Uguale al precedente ma dal lato sinistro
     current_obj=all_obj->get_current_object(L_shop_symbol);
     if (current_obj!=nullptr){
-        if (wgetch(layout->game)=='\n'){
+        if (buy && player->Valuta>=current_obj->price){
+            player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
+            player->set_stats(all_obj);
+            if(strcmp(L_shop_symbol, " H ")== 0) player->heal();
+            if(strcmp(L_shop_symbol, " # ")== 0) player->set_shield();
             rooms->normal_maps[rooms->current_room]->shop_used=true;
             drawMap(layout, map);
             wrefresh(layout->game);
+            saveGame(all_obj, player);
         }
     }
-
-    //Elimina il timeout temporaneo
-    notimeout(layout->game, true);
 }
 
 void Game::gameLOOP(){
@@ -199,7 +219,7 @@ void Game::gameLOOP(){
 
         // Disegna il bordo del gioco
         layout->draw_box();
-
+        layout->write_information(player->health, player->shield, player->maxhp, player->damage); // sostituito con player->health
         // Disegna e aggiorna i nemici
         if (base_en != nullptr && rooms->current_room%5!=0)
         {   
@@ -208,6 +228,7 @@ void Game::gameLOOP(){
             drawMap(layout, map);
             srand(time(NULL));
             layout->draw_box();
+           
             base_en = b_update_enemy(base_en, layout->game,map, player, proiettile);
         } 
         rooms->room_enemy[rooms->current_room]=base_en;
@@ -236,9 +257,9 @@ void Game::gameLOOP(){
             // Rimuovi i proiettili
             proiettile = tail_delete(proiettile, map);
         }
-
         // Gestisci l'input dell'utente
         int ch = getch();
+        buy=false;
         if (ch == ' ')
         {
             // Sparo di un proiettile
@@ -272,6 +293,7 @@ void Game::gameLOOP(){
             // Esci dal gioco
             quit = true;
         }
+        if (ch=='\n')buy=true;
         if (map->platformUnder(player->x, player->y))
             player->fall = false;
         if (!player->isJumping && !map->platformUnder(player->x, player->y))
@@ -286,6 +308,15 @@ void Game::gameLOOP(){
             this->counter = updateJump(layout->game, player, map, player->isJumping, this->counter);
         }
         
+        // GAME OVER
+        if (player->health <= 0){
+            
+            layout->game_over();
+            napms(100);
+            quit = true;
+            gameover = true;
+            this->run();
+        }
         shop_control();
         wrefresh(layout->game);
         
@@ -305,7 +336,7 @@ void Game::gameLOOP(){
             }         
             base_en=rooms->get_current_enemy();
 
-            if (rooms->current_room%5==0) saveGame(all_obj, rooms);
+            saveGame(all_obj, player);
         }
 
         if (rooms->current_room == 2 && rooms->current_room == rooms->last_room){
@@ -314,13 +345,14 @@ void Game::gameLOOP(){
         }
 
         //Caso in cui vogliamo tornare indietro
-        if (player->x==1 && rooms->current_room != rooms->initial_room){
+        if (player->x==1 && rooms->current_room != 0){
             map=rooms->load_room(rooms->current_room-1);
             player->x=MAX_X-2;
             if (map->isPlatform(player->y, player->x)){
-        player->y--;
+                player->y--;
             }
             base_en=rooms->get_current_enemy();
+            saveGame(all_obj, player);
         }
 
         //Caso in cui si va avanti ma non siamo nell'ultima stanza
@@ -328,23 +360,26 @@ void Game::gameLOOP(){
             map=rooms->load_room(rooms->current_room+1);
             player->x=2;
             if (map->isPlatform(player->y, player->x)){
-        player->y--;
+                player->y--;
             }
             base_en=rooms->get_current_enemy();
+            saveGame(all_obj, player);
         }
     }
-    
-   
 }
 
 void Game::run()
 {
     // Inizializza lo schermo di gioco
     layout->init_screen();
-
+    quit = false;
+    if (gameover){
+    player->health = player->maxhp;
+    saveGame(all_obj, player);
+    gameover = false;
+    }
     // Mostra il menu principale e ottieni la scelta dell'utente
-    int scelta = layout->main_menu();
-
+   int scelta = layout->main_menu();
     if (scelta)
     {
         clear();
@@ -355,8 +390,8 @@ void Game::run()
             // Genera la mappa di gioco
             map->generateFirstMap();
             rooms=new room(map);
-            //deleteSave();
-            // Inizializza il giocatore
+            saveGame(all_obj, player);
+           // Inizializza il giocatore
             player->init();
 
             bool game_over = false;
@@ -369,12 +404,11 @@ void Game::run()
         }
 
         else if(scelta==2){
-            map->generateShop();
+            map->generateFirstMap();
             rooms=new room(map);
-            loadGame(all_obj, rooms);
-            if (rooms->current_room==0){
-                map->generateFirstMap();
-            }
+            loadGame(all_obj, player);
+            
+            player->set_stats(all_obj);
             player->init();
 
             bool game_over=false;
