@@ -50,7 +50,7 @@ void Player::p_move(WINDOW *game, char m = 'r')
 void Player::set_stats(objects* obj){
     this->maxhp = 40 + (5*obj->get_possession(5)) + (7*obj->get_possession(6)) + (10*obj->get_possession(7));
     this->damage= 1 + (1*obj->get_possession(2)) + (2*obj->get_possession(3)) + (3*obj->get_possession(4));
-    this->jump_max= this->jump_max + (1*obj->get_possession(1));
+    this->jump_max= this->jump_max + (2*obj->get_possession(1));
 }
 
 //Imposta uno scudo pari a metà degli hp massimi

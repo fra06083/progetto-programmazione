@@ -24,9 +24,9 @@ private:
   p_pro proiettile;
   objects* all_obj=new objects;
   object* current_obj;
-  bool quit , gameover = false;
+  bool quit , gameover = false, bitem = false;
   bool buy=false;
-  int counter=0, cooldown=0, contatore =20; // il secondo è un cooldown per sparare, il terzo serve per infliggere danno al giocatore
+  int counter=0, cooldown=0, contatore =20, nmunizioni = 0; // il secondo è un cooldown per sparare, il terzo serve per infliggere danno al giocatore
   bool canShoot = true;
   int random_number=rand();
   char R_shop_symbol[4];

@@ -12,11 +12,6 @@ room::room(Map *first_map, int initial_room) {
 }
 
 void room::cleanup_maps() {
-    current_room=0;
-    last_room=0;
-    base_en_counter=0;
-    medium_en_counter=0;
-    tough_en_counter=0;
     if (normal_maps) {
         for (int i = 0; i < current_room; ++i) {
             delete normal_maps[i];
