@@ -172,13 +172,12 @@ void Game::shop_control(){
     //Legge le 3 posizioni a destra e a sinistra del player e le salva in shop_symbol
     mvwinnstr(layout->game, player->y, player->x+1, R_shop_symbol, 3);
     mvwinnstr(layout->game, player->y, player->x-3, L_shop_symbol, 3);
-    bitem = false;
+
     //Current_obj è uguale all'oggetto di cui riconosce i simboli ( H ,+ +...), nullptr altrimenti
     current_obj=all_obj->get_current_object(R_shop_symbol);
+    
     //Entra in questo if solo se ci trviamo davanti ad uno shop
     if (current_obj!=nullptr){
-        bitem = true;
-        layout->shop(current_obj, player->Valuta);
         if (buy && player->Valuta>=current_obj->price){
             player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
@@ -195,8 +194,6 @@ void Game::shop_control(){
     //Uguale al precedente ma dal lato sinistro
     current_obj=all_obj->get_current_object(L_shop_symbol);
     if (current_obj!=nullptr){
-        bitem = true;
-        layout->shop(current_obj, player->Valuta);
         if (buy && player->Valuta>=current_obj->price){
             player->Valuta=player->Valuta-current_obj->price;
             all_obj->buy_obj(*current_obj);
@@ -228,11 +225,8 @@ void Game::gameLOOP(){
 
         // Disegna il bordo del gioco
         layout->draw_box();
-        if (!bitem)
-        layout->write_information(player->health, player->shield, player->maxhp, player->damage, player->Valuta, rooms->current_room, cooldown);
-        mvwprintw(layout->info, 17, 1, " "); // info shop tolte
+        layout->write_information(player->health, player->shield, player->maxhp, player->damage, player->Valuta, rooms->current_room, cooldown); // sostituito con player->health
         // Disegna e aggiorna i nemici
-       
         if (base_en != nullptr && rooms->current_room%5!=0)
         {   
             base_en->b_en->draw(layout->game);
@@ -272,14 +266,10 @@ void Game::gameLOOP(){
         // Gestisci l'input dell'utente
         int ch = getch();
         buy=false;
-        if (nmunizioni >= 5){
-          cooldown = 50;
-          nmunizioni = 0;
-        }
         if (ch == ' ' && cooldown  <= 0)
         {
             // Sparo di un proiettile
-            nmunizioni++;
+            cooldown = 50;
             Proiettile *p = new Proiettile(player->x, player->y);
             p->spara();
             p->dir = p_direction;
@@ -338,6 +328,7 @@ void Game::gameLOOP(){
             napms(100);
             quit = true;
             gameover = true;
+            rooms->cleanup_maps();
             this->run();
         }
         shop_control();

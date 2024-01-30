@@ -44,8 +44,6 @@ void Layout::write_information(int health, int shield, int maxhp, int damage, in
     mvwprintw(info, 14, 1, "RELOADING AMMO....");
     else 
     mvwprintw(info, 14, 1, " ");
-    if (livello%5==0 && livello!=0)
-    mvwprintw(info, 17, 1, "(!) Per acquistare un oggetto, vai di fianco ad un item.");
     wrefresh(info);
 }
 void Layout::shop(object* item, int coin){
@@ -53,19 +51,6 @@ void Layout::shop(object* item, int coin){
     mvwprintw(info, 2, 1, "/ __| || |/ _ \\| _ \\");
     mvwprintw(info, 3, 1, "\\__ \\ __ | (_) |  _/");
     mvwprintw(info, 4, 1, "|___/_||_|\\___/|_|  ");
-    mvwprintw(info, 6, 1, "Soldi: %i", coin);
-    mvwprintw(info, 8, 1, "<========================>");
-    mvwprintw(info, 10, 1, "Oggetto: %s", item->name);
-    mvwprintw(info, 11, 1, "Descrizione:");
-    mvwprintw(info, 12, 1, "%s", item->description);
-    mvwprintw(info, 14, 1, "Prezzo: %i", item->price);
-    mvwprintw(info, 15, 1, "Livello attuale: %i", item->possession);
-    if (item->price > coin){
-        mvwprintw(info, 17, 1, "(!) MONETE INSUFFICIENTI");
-    } else {
-        mvwprintw(info, 17, 1, "V Clicca ENTER per acquistare!");
-    }
-
     wrefresh(info);
       
     
