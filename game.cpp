@@ -338,7 +338,6 @@ void Game::gameLOOP(){
             napms(100);
             quit = true;
             gameover = true;
-            rooms->cleanup_maps();
             this->run();
         }
         shop_control();
