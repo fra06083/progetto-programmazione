@@ -13,16 +13,23 @@ room::room(Map *first_map, int initial_room) {
 
 void room::cleanup_maps() {
     if (normal_maps) {
-        current_room=0;
-        last_room=0;
-        base_en_counter=0;
-        medium_en_counter=0;
-        tough_en_counter=0;
         for (int i = 0; i < current_room; ++i) {
             delete normal_maps[i];
         }
         delete[] normal_maps;
         normal_maps = nullptr;
+
+        for (int i = 0; i < current_room; ++i) {
+            delete room_enemy[i];
+        }
+        delete[] room_enemy;
+        room_enemy = nullptr;
+        
+        current_room=0;
+        last_room=0;
+        base_en_counter=0;
+        medium_en_counter=0;
+        tough_en_counter=0;
     }
 }
 
