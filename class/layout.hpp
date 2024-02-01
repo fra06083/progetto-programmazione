@@ -17,7 +17,7 @@ public:
   int main_menu();
   void game_over();
   void shop(object* items, int coin);
-  void write_information(int health, int shield, int maxhp, int damage, int gold, int livello, int conto);
+  void write_information(int health, int shield, int maxhp, int damage, int gold, int livello, int conto, int munizioni);
   void draw_box();
   void clearwin();
   void draw_player(int x, int y);

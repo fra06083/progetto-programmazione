@@ -27,7 +27,7 @@ void Layout::game_over(){
     refresh();
     napms(5000);
 }
-void Layout::write_information(int health, int shield, int maxhp, int damage, int gold, int livello, int conto){
+void Layout::write_information(int health, int shield, int maxhp, int damage, int gold, int livello, int conto, int munizioni){
     mvwprintw(info, 1, 1, " ___ _____ _ _____ ___ ");
     mvwprintw(info, 2, 1, "/ __|_   _/_\\_   _/ __|");
     mvwprintw(info, 3, 1, "\\__ \\ | |/ _ \\| | \\__ \\");
@@ -40,10 +40,9 @@ void Layout::write_information(int health, int shield, int maxhp, int damage, in
     mvwprintw(info, 9, 1, "ORO: %i", gold);
     mvwprintw(info, 10, 1, "DANNO: %i", damage);
     
-    if (conto > 0) 
+    mvwprintw(info, 14, 1, "MUNIZIONI: %i/5", munizioni);
+    if (conto > 0)
     mvwprintw(info, 14, 1, "RELOADING AMMO....");
-    else 
-    mvwprintw(info, 14, 1, " ");
     if (livello%5==0 && livello!=0)
     mvwprintw(info, 17, 1, "(!) Per acquistare un oggetto, vai di fianco ad un item.");
     wrefresh(info);

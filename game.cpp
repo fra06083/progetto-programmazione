@@ -39,6 +39,18 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
         while (count != nullptr)
         {
             if (count->b_en->enemyattack(player->x, player->y) && contatore <= 0){
+              if(player->shield - count->b_en->damage >=0){
+                            player->shield = player->shield - count->b_en->damage;
+                        }
+                        else if(player->shield - count->b_en->damage <0){
+                            player->health = player->health + player->shield - count->b_en->damage;
+                            player->shield =0;
+                        }
+                        else if(player->shield==0){
+                        player->health = player->health - count->b_en->damage;
+                        
+                        }
+              
               player->health = player->health-2;
                contatore = 20;
             }
@@ -229,7 +241,7 @@ void Game::gameLOOP(){
         // Disegna il bordo del gioco
         layout->draw_box();
         if (!bitem)
-        layout->write_information(player->health, player->shield, player->maxhp, player->damage, player->Valuta, rooms->current_room, cooldown);
+        layout->write_information(player->health, player->shield, player->maxhp, player->damage, player->Valuta, rooms->current_room, cooldown, 5-nmunizioni);
         mvwprintw(layout->info, 17, 1, " "); // info shop tolte
         // Disegna e aggiorna i nemici
        
@@ -309,6 +321,7 @@ void Game::gameLOOP(){
         if ((ch == 'w' || ch == 'W' || ch == KEY_UP) && (!player->fall && !player->isJumping))
         {
             // Inizia il salto se il giocatore non è già in salto o cadendo
+            if(map->platformUnder(player->x, player->y))
             player->isJumping = true;
         }
         if (ch=='\n')buy=true;
@@ -338,7 +351,7 @@ void Game::gameLOOP(){
             napms(100);
             quit = true;
             gameover = true;
-            this->run();
+            
         }
         shop_control();
         wrefresh(layout->game);
@@ -389,6 +402,8 @@ void Game::gameLOOP(){
             saveGame(all_obj, player);
         }
     }
+    if (gameover)
+    this->run();
 }
 
 void Game::run()
@@ -396,13 +411,14 @@ void Game::run()
     // Inizializza lo schermo di gioco
     layout->init_screen();
     quit = false;
+    int scelta = 0;
     if (gameover){
         player->health = player->maxhp;
         saveGame(all_obj, player);
         gameover = false;
     }
     // Mostra il menu principale e ottieni la scelta dell'utente
-   int scelta = layout->main_menu();
+   scelta = layout->main_menu();
     if (scelta)
     {
         clear();
