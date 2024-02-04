@@ -61,10 +61,10 @@ p_base_en Game::b_update_enemy( p_base_en base_en, WINDOW* game, Map *map, Playe
             }
                 count->b_en->timer+= 1;
                 int deltaX = player->x - count->b_en->x_;
-                if(deltaX>0 && player->x-1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX>0 && player->x-1!= count->b_en->x_ && !Base_en::Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'r');
                 }
-                if(deltaX<0 && player->x+1!= count->b_en->x_ && !Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
+                if(deltaX<0 && player->x+1!= count->b_en->x_ && !Base_en::Base_isPositionOccupied(layout->game,  count->b_en->x_,  count->b_en->y_, deltaX)){
                     count->b_en->move(game, map, 'l');
                 }
                 
@@ -305,7 +305,7 @@ void Game::gameLOOP(){
         if (ch == 'a' || ch == 'A' || ch == KEY_LEFT)
         {
             // Movimento a sinistra del giocatore
-            if (!Base_isPositionOccupied(layout->game, player->x, player->y, -1)){
+            if (!Base_en::Base_isPositionOccupied(layout->game, player->x, player->y, -1)){
             player->p_move(layout->game, 'l');
             p_direction = 'l';
             }
@@ -313,7 +313,7 @@ void Game::gameLOOP(){
         if (ch == 'd' || ch == 'D' || ch == KEY_RIGHT)
         {
             // Movimento a destra del giocatore
-            if (!Base_isPositionOccupied(layout->game, player->x, player->y, 1)){
+            if (!Base_en::Base_isPositionOccupied(layout->game, player->x, player->y, 1)){
             player->p_move(layout->game, 'r');
             p_direction = 'r';
             }

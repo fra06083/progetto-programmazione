@@ -45,7 +45,7 @@ public:
     p_pro proiettili=NULL;
     void move(WINDOW* game,Map *map, char c);
     void sparareProiettile( int playerX, int playerY);
-    
+    static bool Base_isPositionOccupied(WINDOW* game, int x, int y, int direction);
 };
 
 

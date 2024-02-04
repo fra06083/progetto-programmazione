@@ -1,5 +1,4 @@
 #include "class/layout.hpp"
-#include "class/collision.hpp"
 #include "class/proiettile.hpp"
 #include "class/objects.hpp"
 #include "class/personaggio.hpp"

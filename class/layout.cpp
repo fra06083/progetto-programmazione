@@ -62,7 +62,7 @@ void Layout::shop(object* item, int coin){
     if (item->price > coin){
         mvwprintw(info, 17, 1, "(!) MONETE INSUFFICIENTI");
     } else {
-        mvwprintw(info, 17, 1, "V Clicca ENTER per acquistare!");
+        mvwprintw(info, 17, 1, "° Clicca ENTER per acquistare!");
     }
 
     wrefresh(info);
