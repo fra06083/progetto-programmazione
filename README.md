@@ -20,6 +20,7 @@ g++ main.cpp savingSystem/SaveLoad.cpp class/layout.cpp class/objects.cpp class/
 PER AVVIARE IL GIOCO:
 
 ./test
+(è necessario mettere la shell a schermo intero ed avere una risoluzione minima di 1920×1080 per poter visualizzare correttamente il gioco)
 
 PER MUOVERSI NEL MENU' DI GIOCO:
 
