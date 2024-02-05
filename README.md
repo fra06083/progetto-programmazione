@@ -23,7 +23,7 @@ PER AVVIARE IL GIOCO:
 
 PER MUOVERSI NEL MENU' DI GIOCO:
 
-- usare le frecce (SU E GIU') per selezionare la scelta:
+- usare le frecce (SU E GIU') o W e S per selezionare la scelta:
 
 CONTINUA LA PARTITA: mantiene i potenziamenti acquisiti nelle partite precedenti;
 
@@ -43,7 +43,7 @@ all'inizio il danno fatto dal giocatore  è pari a 1 per proiettile;
 
 ci sono tre tipi di nemici:
 - nemici 'X': si muovono, attaccano solo per contatto ed hanno VITA: 3, DANNO: 2, GOLD: 3;
-- nemici 'Y':non si muovono, attaccano per contatto e sparando ed hanno VITA: 5, DANNO: 4, GOLD: 5;
+- nemici 'Y': non si muovono, attaccano per contatto e sparando ed hanno VITA: 5, DANNO: 4, GOLD: 5;
 - nemici 'Z': si muovono, attaccano per contatto e sparando ed hanno VITA: 7, DANNO: 6, GOLD: 10.
 
 ogni cinque livelli compare un livello shop in cui il giocatore può leggere la descrizione di un oggetto posizionandosi sulle pareti della cassa '|' ed acquistarlo premendo INVIO:
