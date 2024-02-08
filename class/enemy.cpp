@@ -33,9 +33,11 @@
             simbolo='Z';
         }
     }
+    //controlla se il nemico è davanti al giocatore
     bool Base_en::enemyattack(int playerX, int playerY){
         return (playerY == y_ && (playerX-1 == x_ || playerX+1 == x_));
     }
+    // disegna il nemico 
     void Base_en::draw(WINDOW *win)
     { 
         if(!dead){
@@ -51,6 +53,7 @@
       
     }
     }
+    // funzione che controlla se il personaggio è a sinistra o a destra e fa sparare il nemico in quella direzione
     void Base_en::sparareProiettile( int playerX, int playerY) {
     if (!dead && simbolo!='X') {
         // Calcola la direzione in base alla posizione del player
@@ -66,7 +69,7 @@
         nuovoProiettile->spara();
 
         // Imposta la direzione del proiettile
-        nuovoProiettile->dir=direzione; // Assumendo che ci sia un metodo setDirezione
+        nuovoProiettile->dir=direzione;
 
         // Aggiungi il proiettile alla lista
         head_insert(proiettili, nuovoProiettile);
@@ -77,9 +80,7 @@
     { 
         if(!dead){
             if(simbolo!='Y'){
-        // Calcola la direzione verso il giocatore
-        //int deltaX = playerX - x_;
-        //int deltaY = playerY - y_;
+        
         if(counter_move==speed){
         // Sposta il nemico verso il giocatore
         if (c=='r')
@@ -95,7 +96,7 @@
         }
         counter_move=counter_move+1;
         }
-        //while (!map->platformUnder(x_, y_)){
+        
         if(!map->platformUnder(x_, y_)){ 
             mvwaddch(game, y_, x_, ' '); // Cancellazione personaggio corrente
             y_ += 1;
@@ -149,14 +150,13 @@ p_base_en e_tail_delete(p_base_en list, Map *map, p_pro p, Player* player) {
                 // Segna il proiettile come colpito
                 colpito->pro->colpito = true;
                 
-                // Salva il puntatore al prossimo nodo
+                
                 p_base_en nextNode = currentNode->next;
 
-                // Elimina il nemico corrente dalla lista
+                
                 delete currentNode->b_en;
                 delete currentNode;
 
-                // Aggiorna i collegamenti nella lista
                 if (prevNode != NULL) {
                     prevNode->next = nextNode;
                 } else {
@@ -182,11 +182,10 @@ p_base_en e_tail_delete(p_base_en list, Map *map, p_pro p, Player* player) {
         // Reinizializza il puntatore al nodo corrente e al nodo precedente all'inizio delle liste
         currentNode = list;
         prevNode = NULL;
-        // Passa al prossimo proiettile colpito
+    
         colpito = colpito->next;
     }
 
-    // Restituisci la lista aggiornata
     return list;
 }
 
