@@ -1,5 +1,6 @@
 #include "SaveLoad.hpp"
 
+// Funzione che salva delle informazioini del player
 void saveGame(objects* obj_info, Player* player_info){
     std::ofstream file ("savingSystem/saveFile.txt", std::ios::trunc);
 
@@ -8,6 +9,7 @@ void saveGame(objects* obj_info, Player* player_info){
             file<<obj_info->get_possession(i)<<std::endl;  //Salva il numero di potenziamenti in possesso
         }
 
+        // Salva alcuni valori propri del player
         file<<player_info->health<<std::endl;
         file<<player_info->shield<<std::endl;
         file<<player_info->Valuta<<std::endl;
@@ -19,6 +21,7 @@ void saveGame(objects* obj_info, Player* player_info){
     else std::cerr << "Errore nell'apertura del file." << std::endl;
 }
 
+// Funzione che carica i valori da file e li assegna
 void loadGame(objects* obj_info, Player* player_info){
     std::ifstream file ("savingSystem/saveFile.txt");
     int value=0;
