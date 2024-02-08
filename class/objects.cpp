@@ -56,6 +56,7 @@
     all_obj[8].possession=0;
 }
 
+// Restituisce l'oggette che il personaggio sta guardando al momento (se non guarda niente ritorna nullptr)
 object* objects::get_current_object(char symbol[4]){
     object* temp_obj=nullptr;
     for (int i=0; i<9; i++){
@@ -66,10 +67,7 @@ object* objects::get_current_object(char symbol[4]){
     return temp_obj;
 }
 
-object* objects::get_all_obj(){
-    return all_obj;
-}
-
+//Funzione che incrementa il numero possedduto di un certo oggetto
 void objects::buy_obj(object current_obj){
     for (int i=0; i<9; i++){
         if (strcmp(all_obj[i].symbol, current_obj.symbol) == 0){
@@ -78,10 +76,12 @@ void objects::buy_obj(object current_obj){
     }
 }
 
+//Funzione che restituisce il numero posseduto di un cero oggetto (denominato dalla sua posizione nell'array objects)
 int objects::get_possession(int position){
     return all_obj[position].possession;
 }
 
+//Aggiorna il numero di oggetti posseduti con un valore da noi deciso
 void objects::load_possession(int position, int n){
     all_obj[position].possession=n;
 }
