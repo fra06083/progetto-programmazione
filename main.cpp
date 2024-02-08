@@ -1,5 +1,5 @@
 
-//comando compilazione: g++ main.cpp savingSystem/SaveLoad.cpp class/layout.cpp class/objects.cpp class/map/room.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp  class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o test
+//comando compilazione: g++ main.cpp savingSystem/SaveLoad.cpp class/layout.cpp class/objects.cpp class/map/room.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp  class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o run
 #include "game.hpp"
 #include <iostream>
 #include <ctime>
