@@ -24,22 +24,22 @@ void Player::init()
     }
     x = 1;
     x=MAX_X/2;
-    y = MAX_Y-2; //- bodyHeight; // Posiziona il baricentro dello stickman sotto le gambe, sopra la piattaforma più bassa trovata
+    y = MAX_Y-2; 
 }
 void Player::p_move(WINDOW *game, char m = 'r')
 {
    if (m == 'l' && x > 1){
-        mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
+        mvwaddch(game, y, x, ' '); 
         x -= 1;
-        draw(game); // Disegno del personaggio nella nuova posizione
+        draw(game); 
    }
-        // Controllo se il giocatore è caduto dalla mappa
+        
         if (x < 0)
         {
             isAlive = false;
         }
     if (m == 'r' && x<MAX_X-1){
-        mvwaddch(game, y, x, ' '); // Cancellazione personaggio corrente
+        mvwaddch(game, y, x, ' '); 
         x += 1;
         draw(game); // Disegno del personaggio nella nuova posizione
      
