@@ -6,9 +6,7 @@
 /* Tutto ciò che è una piattaforma viene segnato da una matrice bool map[j][i] = true
    in modo che sia poi riconosciuto dalla funzione is platform e lo traduca in "=" */
 
-Map::Map(){
-    
-}
+Map::Map(){   }
 
 void Map::generateMap(){  
     for (int i = 0; i < MAX_X; i++)  // Creazione del terreno
@@ -127,12 +125,14 @@ void Map::generateMap(){
     
 }
 
+//Genera un livello shop casuale
 void Map::generateShop(){
     shop_used=false;
     platform::shops_type(rand()%5+1, shop_layout);
     Map::make_readable(shop_layout);
 }
 
+//Genera la prima stanza (solo pavimento)
 void Map::generateFirstMap(){
     for (int i = 0; i < MAX_X; i++)  // Creazione del terreno
     {
@@ -160,6 +160,7 @@ bool Map::isPlatform(int x, int y){
     return map[y][x];
 }
 
+// Permette di vedere se è presente una piattaforma sopra la posizione designata
 bool Map::platformAbove(int x, int y){
      if (map[y-1][x]){
         return true;
@@ -171,6 +172,7 @@ bool Map::platformAbove(int x, int y){
      }
 }
 
+// Permette di vedere se è presente una piattaforma sopra la posizione designata
 bool Map::platformUnder(int x, int y){
      if (map[y+1][x]){
         return true;
@@ -187,7 +189,7 @@ int Map::choose_platform (){
     return rand()%10+1;
 }
 
-
+// Funzione per probabilita
 bool Map::probability(int prob) {
     return rand() % 100 < prob;
 }
