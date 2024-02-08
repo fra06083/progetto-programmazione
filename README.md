@@ -15,11 +15,11 @@ NOME DEL GIOCO:
 
 PER COMPILARE IL GIOCO:
 
-g++ main.cpp savingSystem/SaveLoad.cpp class/layout.cpp class/objects.cpp class/map/room.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp  class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o test
+g++ main.cpp savingSystem/SaveLoad.cpp class/layout.cpp class/objects.cpp class/map/room.cpp class/map/map.cpp class/map/platform.cpp class/personaggio.cpp  class/enemy.cpp class/proiettile.cpp game.cpp -lncurses -o run
 
 PER AVVIARE IL GIOCO:
 
-./test
+./run
 (è necessario mettere la shell a schermo intero ed avere una risoluzione minima di 1920×1080 per poter visualizzare correttamente il gioco)
 
 PER MUOVERSI NEL MENU' DI GIOCO:
