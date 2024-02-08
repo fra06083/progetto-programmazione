@@ -17,11 +17,8 @@ public:
 
     room(Map *first_map, int initial_room=0);
 
-    void cleanup_maps();
     Map* generate_new_room();
     Map* load_room(int room_number);
-    int get_current_room ();
-    int get_last_room();
     p_base_en get_current_enemy();
     void generate_enemy();
 };
