@@ -11,28 +11,7 @@ room::room(Map *first_map, int initial_room) {
     room_enemy[last_room]=nullptr;
 }
 
-void room::cleanup_maps() {
-    if (normal_maps) {
-        for (int i = 0; i < current_room; ++i) {
-            delete normal_maps[i];
-        }
-        delete[] normal_maps;
-        normal_maps = nullptr;
-
-        for (int i = 0; i < current_room; ++i) {
-            delete room_enemy[i];
-        }
-        delete[] room_enemy;
-        room_enemy = nullptr;
-        
-        current_room=0;
-        last_room=0;
-        base_en_counter=0;
-        medium_en_counter=0;
-        tough_en_counter=0;
-    }
-}
-
+// Genera una nuova stanza (shop o normale) all'occorenza
      Map* room::generate_new_room() {
         this->current_room++;
         this->last_room = this->current_room;
@@ -60,23 +39,18 @@ void room::cleanup_maps() {
         return normal_maps[current_room];      
     }
 
+    // Carica una stanza già creata in precedenza
     Map* room::load_room(int room_number) {
         this->current_room=room_number;
         return normal_maps[current_room];
     }
-
-    int room::get_current_room(){
-        return current_room;
-    }
-
-    int room::get_last_room(){
-        return last_room;
-    }
-
+    
+    // Ritorna la lista di nemici presenti in una stanza
     p_base_en room::get_current_enemy(){
         return room_enemy[current_room];
     }
 
+    // Genera nuovi nemici alla generazione di una stanza (non shop)
     void room::generate_enemy(){
         Base_en *new_enemy;
         p_base_en* new_enemys = new p_base_en[this->last_room+1];
@@ -128,3 +102,4 @@ void room::cleanup_maps() {
         delete[] this->room_enemy;
         this->room_enemy = new_enemys;
     }
+
