@@ -76,24 +76,24 @@ room::room(Map *first_map, int initial_room) {
         }
 
         for(int i=0; i<base_en_counter; i++){
-            int en_X = std::rand() %54 + 25;
-            int en_Y = std::rand() % 23;
+            int en_X = std::rand() %54 + 24;
+            int en_Y = std::rand() % 23-2;
                    
             new_enemy = new Base_en(en_X, en_Y, 'b');
             new_enemys[this->current_room] = e_head_insert(new_enemys[current_room], new_enemy);
             } 
         
         for(int i=0; i<medium_en_counter; i++){
-            int en_X = std::rand() %54 + 25;
-            int en_Y = std::rand() % 23;
+            int en_X = std::rand() %54 + 24;
+            int en_Y = std::rand() % 23-2;
         
             new_enemy = new Base_en(en_X, en_Y, 'm');
             new_enemys[this->current_room] = e_head_insert(new_enemys[current_room], new_enemy);
         }
 
         for (int i=0; i<tough_en_counter; i++){
-            int en_X = std::rand() %54 + 25;
-            int en_Y = std::rand() % 23;
+            int en_X = std::rand() %54 + 24;
+            int en_Y = std::rand() % 23-2;
         
             new_enemy = new Base_en(en_X, en_Y, 't');
                 new_enemys[this->current_room] = e_head_insert(new_enemys[current_room], new_enemy);
