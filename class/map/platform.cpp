@@ -9,18 +9,6 @@
         this-> platN = platN; 
         this-> width = width;
     }
-    int platform::platX (){  // X della piattaforma
-        return x;
-    }
-    int platform::platY (){   // Y della piattaforma
-        return y;
-    }
-    int platform::platNumber (){  // Numero di piattaforme di ogni template 
-        return platN;
-    }
-    int platform::platW(){   // Larghezza della piattaforma
-        return width;
-    }
 
     void platform::platformType (platform *platf[], int randType){  // Templates 
         int i=0;
@@ -92,7 +80,7 @@
         }
     }  
 
-
+// Template dei 5 diversi tipi shop
 void platform::shops_type(int rand_shop, platform* shop_layout[]){
     int i=0;
     switch (rand_shop)
